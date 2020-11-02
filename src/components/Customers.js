@@ -1,16 +1,18 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef } from "react";
 import { MyContext } from "../Context/Context";
 import { AgGridReact } from "ag-grid-react";
 import Button from "@material-ui/core/Button";
-import EditIcon from "@material-ui/icons/Edit";
+
 import DeleteIcon from "@material-ui/icons/Delete";
 import FitnessCenterIcon from "@material-ui/icons/FitnessCenter";
 import { makeStyles } from "@material-ui/core/styles";
+import "ag-grid-enterprise";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import ModalCustomers from "./ModalCustomers";
 import Confirm from "./Confirm";
 import AddCustomer from "./AddCustomer";
+import ActionsRenderer from "./ActionsRenderer";
 
 const useStyles = makeStyles((theme) => ({
   margin: {
@@ -51,6 +53,13 @@ const useStyles = makeStyles((theme) => ({
 
 const Customers = () => {
   const classes = useStyles();
+  const grid = useRef();
+
+  const [gridApi, setGridApi] = useState(null);
+  console.log(gridApi, "GridApi");
+  const onGridReady = (params) => {
+    setGridApi(params.api);
+  };
 
   const { valueOne } = useContext(MyContext);
 
@@ -62,8 +71,7 @@ const Customers = () => {
   const [deleteCustomer, setDeleteCustomer] = useState("");
   const [training, setTraining] = useState([]);
   const [selfCustomer, setSelfCustomer] = useState({});
-  console.log(customers, "customersJS");
-
+  console.log(training, "CustomersTrain");
   const fetchCustomerTraining = (param) => {
     fetch(`${param}`, {
       credentials: "same-origin",
@@ -78,7 +86,6 @@ const Customers = () => {
         return res.json();
       })
       .then((data) => {
-        console.log(data.content, "data");
         setTraining(data.content);
       })
       .catch((err) => console.error(err));
@@ -95,7 +102,6 @@ const Customers = () => {
         return res.json();
       })
       .then((data) => {
-        console.log(data, "self");
         setSelfCustomer(data);
       })
       .catch((err) => console.error(err));
@@ -120,7 +126,7 @@ const Customers = () => {
 
   const handleClick = (param) => {
     //Modal
-    console.log(param.value[2].href, "clickhref");
+
     fetchCustomerTraining(param.value[2].href);
     fetchCustomerSelf(param.value[0].href);
     setOpen(true);
@@ -137,7 +143,6 @@ const Customers = () => {
     setOpen(false);
   };
   const handleOpenDialog = (param) => {
-    console.log(param.value);
     // Yes No
     setOpenDialog(true);
     setDeleteCustomer(param.value[1].href);
@@ -149,9 +154,81 @@ const Customers = () => {
     setOpenDialog(false);
   };
 
+  const startEditing = (param) => {
+    const refAPI = grid.current.api;
+
+    refAPI.startEditingCell({
+      rowIndex: param.rowIndex,
+      colKey: param.column.colId,
+    });
+  };
+
+  const frameworkComponents = {
+    actionsRenderer: ActionsRenderer,
+  };
+
   const columns = [
     {
+      headerName: "Actions",
+      resizable: true,
+
+      children: [
+        {
+          headerName: "Action",
+          field: "links",
+          editable: false,
+          resizable: true,
+          width: 350,
+
+          cellRendererFramework: (param) => (
+            <div>
+              <Button
+                startIcon={<FitnessCenterIcon />}
+                className={classes.green}
+                variant="contained"
+                color="primary"
+                onClick={() => handleClick(param)}
+              >
+                Trainings
+              </Button>
+
+              {/* <button onClick={() => stopEditing(true)}>Cancel</button>
+
+              <Button
+                startIcon={<EditIcon />}
+                className={classes.yellow}
+                variant="contained"
+                color="secondary"
+                onClick={() => startEditing(param)}
+              >
+                Edit
+              </Button> */}
+
+              <Button
+                startIcon={<DeleteIcon />}
+                className={classes.margin}
+                variant="contained"
+                color="secondary"
+                onClick={() => handleOpenDialog(param)}
+              >
+                Delete
+              </Button>
+            </div>
+          ),
+        },
+      ],
+    },
+    {
+      headerName: "",
+      colId: "actions",
+      cellRenderer: "actionsRenderer",
+      editable: false,
+      filter: false,
+      Width: 50,
+    },
+    {
       headerName: "Customers",
+
       resizable: true,
       children: [
         {
@@ -220,60 +297,27 @@ const Customers = () => {
         },
       ],
     },
-    {
-      headerName: "Actions",
-      resizable: true,
-      children: [
-        {
-          headerName: "Action",
-          field: "links",
-          resizable: true,
-          width: 500,
-
-          cellRendererFramework: (param) => (
-            <div>
-              <Button
-                startIcon={<FitnessCenterIcon />}
-                className={classes.green}
-                variant="contained"
-                color="primary"
-                onClick={() => handleClick(param)}
-              >
-                Trainings
-              </Button>
-              <Button
-                startIcon={<EditIcon />}
-                className={classes.yellow}
-                variant="contained"
-                color="secondary"
-              >
-                Edit
-              </Button>
-              <Button
-                startIcon={<DeleteIcon />}
-                className={classes.margin}
-                variant="contained"
-                color="secondary"
-                onClick={() => handleOpenDialog(param)}
-              >
-                Delete
-              </Button>
-            </div>
-          ),
-        },
-      ],
-    },
   ];
 
   return (
     <div className="ag-theme-alpine" style={{ height: 800, width: "100%" }}>
+      <button onClick={startEditing}>CLIKKK</button>
+
       <AddCustomer />
       <AgGridReact
+        frameworkComponents={frameworkComponents}
+        ref={grid}
+        onGridReady={onGridReady}
+        editType={"fullRow"}
         pagination={true}
         paginationAutoPageSize={true}
         animateRows={true}
         rowData={customers}
         columnDefs={columns}
+        suppressClickEdit
+        defaultColDef={{
+          editable: true,
+        }}
       ></AgGridReact>
       <ModalCustomers
         open={open}

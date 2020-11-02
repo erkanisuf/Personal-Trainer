@@ -79,7 +79,6 @@ export default function FormDialog() {
             fullWidth
           />
           <TextField
-            autoFocus
             margin="dense"
             id="lastname"
             label="Last Name"
@@ -87,7 +86,6 @@ export default function FormDialog() {
             fullWidth
           />
           <TextField
-            autoFocus
             margin="dense"
             id="email"
             label="Email Address"
@@ -103,7 +101,6 @@ export default function FormDialog() {
             }}
           >
             <TextField
-              autoFocus
               margin="dense"
               id="phone"
               label="Phone"
@@ -111,7 +108,6 @@ export default function FormDialog() {
               fullWidth
             />
             <TextField
-              autoFocus
               margin="dense"
               id="city"
               label="City"
@@ -119,7 +115,6 @@ export default function FormDialog() {
               fullWidth
             />
             <TextField
-              autoFocus
               margin="dense"
               id="streetaddress"
               label="Street Adress"
@@ -127,7 +122,6 @@ export default function FormDialog() {
               fullWidth
             />
             <TextField
-              autoFocus
               margin="dense"
               id="postcode"
               label="PostCode"

@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 1000,
     height: "600px",
     margin: `${theme.spacing(5)}px auto`,
-    padding: theme.spacing(2),
+    padding: theme.spacing(20),
   },
   table: {
     width: "100%",
