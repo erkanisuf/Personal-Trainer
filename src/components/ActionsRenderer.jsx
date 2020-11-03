@@ -1,166 +1,283 @@
-import React, { useState, useEffect } from 'react';
-import { useComponentWillMount } from './utils';
+import React, { useState, useEffect, useContext } from "react";
+import { MyContext } from "../Context/Context";
+import { useComponentWillMount } from "./utils";
 import Button from "@material-ui/core/Button";
 import EditIcon from "@material-ui/icons/Edit";
 import { makeStyles } from "@material-ui/core/styles";
 import FitnessCenterIcon from "@material-ui/icons/FitnessCenter";
 import ModalCustomers from "./ModalCustomers";
-
+import Confirm from "./Confirm";
+import CancelIcon from "@material-ui/icons/Cancel";
+import SaveIcon from "@material-ui/icons/Save";
+import DeleteIcon from "@material-ui/icons/Delete";
+import IconButton from "@material-ui/core/IconButton";
 const useStyles = makeStyles((theme) => ({
-   
-    yellow: {
-      margin: theme.spacing(1),
-      width: "100px",
-      fontSize: "10px",
-      padding: "5px",
-      backgroundColor: "#6e6d19",
-      "&:hover": {
-        backgroundColor: "#ffc107",
-      },
+  margin: {
+    margin: theme.spacing(1),
+    width: "100px",
+    fontSize: "10px",
+    padding: "5px",
+    backgroundColor: "#8a1c1c",
+    "&:hover": {
+      backgroundColor: "#f44336",
     },
-   
-  }));
+  },
+  green: {
+    margin: theme.spacing(1),
+    width: "100px",
+    fontSize: "10px",
+    padding: "5px",
+    backgroundColor: "#3b6120",
+    "&:hover": {
+      backgroundColor: "#4caf50",
+    },
+  },
 
+  yellow: {
+    margin: theme.spacing(1),
+    width: "50px",
+    fontSize: "10px",
+    padding: "5px",
+    backgroundColor: "#6e6d19",
+    "&:hover": {
+      backgroundColor: "#ffc107",
+    },
+  },
+  update: {
+    color: "#43a047",
+    margin: "0 -5px",
 
+    "&:hover": {
+      color: "#68b36b",
+    },
+  },
+  cancel: {
+    color: "#f44336",
+    margin: "0 -5px",
+    "&:hover": {
+      color: "#f50057",
+    },
+  },
+
+  extendedIcon: {
+    marginRight: "2px",
+  },
+}));
 
 export default (props) => {
+  const classes = useStyles();
+  const { valueOne } = useContext(MyContext);
 
-    const classes = useStyles();
-    let [editing, setEditing] = useState(false);
-    let [disabled, setDisabled] = useState(false);
-    const [selfCustomer, setSelfCustomer] = useState({});
-    const [open, setOpen] = useState(false);
-    const [training, setTraining] = useState([]);
-    console.log(training,'THE JXS')
-    const [openDialog, setOpenDialog] = useState(false);
-    const handleClose = () => {
-        //Modal Open
-        setOpen(false);
-      };
-    // custom hook
-    useComponentWillMount(() => {
-        let editingCells = props.api.getEditingCells();
-        if (editingCells.length !== 0) {
-            setDisabled(true);
-        }
-    })
+  const [, setCustomers] = valueOne;
 
-    useEffect(() => {
-        props.api.addEventListener('rowEditingStarted', onRowEditingStarted);
-        props.api.addEventListener('rowEditingStopped', onRowEditingStopped);
+  let [editing, setEditing] = useState(false);
+  let [disabled, setDisabled] = useState(false);
+  const [selfCustomer, setSelfCustomer] = useState({});
+  const [open, setOpen] = useState(false);
+  const [training, setTraining] = useState([]);
 
-        return () => {
-            props.api.removeEventListener('rowEditingStarted', onRowEditingStarted);
-            props.api.removeEventListener('rowEditingStopped', onRowEditingStopped);
-        };
-    }, []);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [deleteCustomer, setDeleteCustomer] = useState("");
+  const handleClose = () => {
+    //Modal Open
+    setOpen(false);
+  };
 
-    function onRowEditingStarted(params) {
-        if (props.node === params.node) {
-            setEditing(true);
-        } else {
-            setDisabled(true);
-        }
+  // custom hook
+  useComponentWillMount(() => {
+    let editingCells = props.api.getEditingCells();
+    if (editingCells.length !== 0) {
+      setDisabled(true);
+    }
+  });
+
+  useEffect(() => {
+    props.api.addEventListener("rowEditingStarted", onRowEditingStarted);
+    props.api.addEventListener("rowEditingStopped", onRowEditingStopped);
+
+    return () => {
+      props.api.removeEventListener("rowEditingStarted", onRowEditingStarted);
+      props.api.removeEventListener("rowEditingStopped", onRowEditingStopped);
     };
+  }, []);
 
-    function onRowEditingStopped(params) {
-        if (props.node === params.node) {
-            if (isEmptyRow(params.data)) {
-            
-            } else {
-                setEditing(false);
-            }
-        } else {
-            setDisabled(false);
-        }
+  function onRowEditingStarted(params) {
+    if (props.node === params.node) {
+      setEditing(true);
+    } else {
+      setDisabled(true);
     }
+  }
 
-    function startEditing() {
-        props.api.startEditingCell({
-            rowIndex: props.rowIndex,
-            colKey: props.column.colId
-        });
+  function onRowEditingStopped(params) {
+    if (props.node === params.node) {
+      if (isEmptyRow(params.data)) {
+      } else {
+        setEditing(false);
+      }
+    } else {
+      setDisabled(false);
     }
+  }
 
-    function stopEditing(bool) {
-        console.log(props)
-        props.api.stopEditing(bool);
-    }
+  function startEditing() {
+    props.api.startEditingCell({
+      rowIndex: props.rowIndex,
+      colKey: props.column.colId,
+    });
+  }
 
-    function isEmptyRow(data) {
-        let dataCopy = { ...data };
-        delete dataCopy.id;
-        return !Object.values(dataCopy).some(value => value);
+  function stopEditing(bool) {
+    console.log(props);
+    props.api.stopEditing(bool);
+  }
 
-    }
+  function isEmptyRow(data) {
+    let dataCopy = { ...data };
+    delete dataCopy.id;
+    return !Object.values(dataCopy).some((value) => value);
+  }
 
-    const fetchCustomerTraining = (param) => {
-        fetch(`${param}`, {
-          credentials: "same-origin",
-          headers: {
-            accept: "application/json",
-          },
-        })
-          .then((res) => {
-            if (!res.ok)
-              return Promise.reject(new Error(`HTTP Error ${res.status}`));
-    
-            return res.json();
-          })
-          .then((data) => {
-            setTraining(data.content);
-          })
-          .catch((err) => console.error(err));
-      };
-    function handleClick(){
-        setSelfCustomer(props.data)
-        fetchCustomerTraining(props.data.links[2].href)
-        
-        setOpen(true)
-        console.log('train',props)
-    }
+  const fetchCustomerTraining = (param) => {
+    fetch(`${param}`, {
+      credentials: "same-origin",
+      headers: {
+        accept: "application/json",
+      },
+    })
+      .then((res) => {
+        if (!res.ok)
+          return Promise.reject(new Error(`HTTP Error ${res.status}`));
 
-    return (
-        <div>
-            {editing
-                ? <>
-                    <Button
-                        color="primary"
-                        variant="contained"
-                        onClick={() => stopEditing(false)}
-                        disabled={disabled}>Update</Button>
-                    <Button
-                        color="secondary"
-                        variant="contained"
-                        onClick={() => stopEditing(true)}
-                        disabled={disabled}>Cancel</Button>
-                </>
-                : <>
-                    <Button
-                    startIcon={<EditIcon />}
-                    className={classes.yellow}
-                    variant="contained"
-                    color="secondary"
-                        onClick={startEditing}
-                        disabled={disabled}>Edit</Button>
-            
-                </>
-            }
-            <Button
-                startIcon={<FitnessCenterIcon />}
-                className={classes.yellow}
-                variant="contained"
-                color="primary"
-                onClick={handleClick}
-              >
-                Trainings
-              </Button>
-             <ModalCustomers
+        return res.json();
+      })
+      .then((data) => {
+        setTraining(data.content);
+      })
+      .catch((err) => console.error(err));
+  };
+  function handleClick() {
+    setSelfCustomer(props.data);
+    fetchCustomerTraining(props.data.links[2].href);
+
+    setOpen(true);
+    console.log("train", props);
+  }
+
+  const handleOpenDialog = () => {
+    // Yes No
+    setSelfCustomer(props.data);
+    setOpenDialog(true);
+    setDeleteCustomer(props.data.links[1].href);
+  };
+
+  const handleCloseDialog = () => {
+    // Yes No
+    setOpenDialog(false);
+  };
+  const handleDeleteItem = () => {
+    console.log("i delete this: ", deleteCustomer);
+
+    fetchDelete(deleteCustomer);
+    setOpenDialog(false);
+  };
+  const reFetch = () => {
+    fetch("https://customerrest.herokuapp.com/api/customers")
+      .then((res) => res.json())
+      .then((data) => {
+        setCustomers(data.content);
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const fetchDelete = (param) => {
+    fetch(`${param}`, { method: "DELETE" })
+      .then((data) => {
+        console.log(data, "deleted");
+        reFetch();
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const handleUpdateItem = () => {
+    console.log("i update this: ", props.data);
+    stopEditing(false);
+  };
+  return (
+    <div>
+      <Button
+        startIcon={<DeleteIcon />}
+        className={classes.margin}
+        variant="contained"
+        color="secondary"
+        onClick={handleOpenDialog}
+      >
+        Delete
+      </Button>
+      {editing ? (
+        <span
+          style={{
+            borderRight: "1px solid grey",
+            borderLeft: "1px solid grey",
+            padding: "2px",
+          }}
+        >
+          <IconButton
+            aria-label="save"
+            className={classes.update}
+            onClick={handleUpdateItem}
+            disabled={disabled}
+          >
+            <SaveIcon />
+            <span style={{ fontSize: "10px", color: "grey" }}>Save</span>
+          </IconButton>
+
+          <IconButton
+            aria-label="delete"
+            className={classes.cancel}
+            onClick={() => stopEditing(true)}
+            disabled={disabled}
+          >
+            <CancelIcon />
+            <span style={{ fontSize: "10px", color: "grey" }}>Cancel</span>
+          </IconButton>
+        </span>
+      ) : (
+        <>
+          <Button
+            startIcon={<EditIcon />}
+            className={classes.yellow}
+            variant="contained"
+            color="secondary"
+            onClick={startEditing}
+            disabled={disabled}
+          >
+            Edit
+          </Button>
+        </>
+      )}
+      <Button
+        startIcon={<FitnessCenterIcon />}
+        className={classes.green}
+        variant="contained"
+        color="primary"
+        onClick={handleClick}
+      >
+        Trainings
+      </Button>
+
+      <ModalCustomers
         open={open}
         handleClose={handleClose}
         training={training}
         user={selfCustomer}
       />
-        </div>
-    )
-}
+      <Confirm
+        openDialog={openDialog}
+        handleCloseDialog={handleCloseDialog}
+        handleDeleteItem={handleDeleteItem}
+        user={selfCustomer}
+      />
+    </div>
+  );
+};
