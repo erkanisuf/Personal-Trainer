@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default (props) => {
+const ActionsRenderer =  (props) => {
   const classes = useStyles();
   const { valueOne } = useContext(MyContext);
 
@@ -94,37 +94,85 @@ export default (props) => {
   useEffect(() => {
     props.api.addEventListener("rowEditingStarted", onRowEditingStarted);
     props.api.addEventListener("rowEditingStopped", onRowEditingStopped);
+    
 
     return () => {
       props.api.removeEventListener("rowEditingStarted", onRowEditingStarted);
       props.api.removeEventListener("rowEditingStopped", onRowEditingStopped);
-    };
-  }, []);
 
+    };
+  }, );
+
+
+  const fetchUpdate = (link, object) => {
+    fetch(link, {
+      method: 'PUT',
+      headers: {
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify(object)
+    })
+    .then(key => console.log('key',key))
+    .then(key => {
+    
+      reFetch()
+    })
+    .catch(err => console.error(err))  
+  }
+
+  const [stopedit,setstopEdit] = useState({})
+  
+
+  function start(param){
+    console.log(param.data,'start')
+    
+  }
+  function stop(param){
+    
+    
+    fetchUpdate(param.data.links[1].href,param.data)
+    
+    setstopEdit(param.data)
+  }
+ 
   function onRowEditingStarted(params) {
+    console.log(params)
     if (props.node === params.node) {
       setEditing(true);
+     
     } else {
       setDisabled(true);
+      
     }
   }
 
+  
+
   function onRowEditingStopped(params) {
+    
+    console.log(params)
     if (props.node === params.node) {
       if (isEmptyRow(params.data)) {
       } else {
         setEditing(false);
+        
       }
     } else {
       setDisabled(false);
+      
     }
   }
 
   function startEditing() {
+    props.api.addEventListener("rowEditingStopped", start);
     props.api.startEditingCell({
       rowIndex: props.rowIndex,
       colKey: props.column.colId,
     });
+   
+    
+    props.api.addEventListener("rowEditingStarted", start);
+    
   }
 
   function stopEditing(bool) {
@@ -199,9 +247,13 @@ export default (props) => {
       .catch((err) => console.error(err));
   };
 
+
+  
   const handleUpdateItem = () => {
-    console.log("i update this: ", props.data);
-    stopEditing(false);
+   
+    props.api.addEventListener("rowEditingStopped", stop);
+    console.log('update this',stopedit)
+  stopEditing(false)
   };
   return (
     <div>
@@ -281,3 +333,5 @@ export default (props) => {
     </div>
   );
 };
+
+export default  ActionsRenderer 

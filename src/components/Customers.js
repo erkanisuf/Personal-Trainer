@@ -137,6 +137,7 @@ const Customers = () => {
           editable: true,
           floatingFilter: true,
         }}
+        enableCellChangeFlash={true}
       ></AgGridReact>
     </div>
   );
