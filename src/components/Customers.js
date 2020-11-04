@@ -13,7 +13,7 @@ const Customers = () => {
   const grid = useRef();
 
   const [gridApi, setGridApi] = useState(null);
-  console.log(gridApi, "GridApi");
+
   const onGridReady = (params) => {
     setGridApi(params.api);
   };
@@ -28,7 +28,6 @@ const Customers = () => {
 
   const [searchBar, setsearchBar] = useState("");
   const handleSearch = (e) => {
-    console.log(searchBar);
     setsearchBar(e.target.value);
     gridApi.setQuickFilter(e.target.value);
   };
@@ -38,6 +37,7 @@ const Customers = () => {
       headerName: "Actions",
       colId: "actions",
       cellRenderer: "actionsRenderer",
+
       editable: false,
       filter: false,
       sortable: false,
@@ -47,7 +47,7 @@ const Customers = () => {
     },
     {
       headerName: "Customers",
-
+      resizable: true,
       children: [
         {
           headerName: "FirstName",
@@ -117,11 +117,14 @@ const Customers = () => {
       ],
     },
   ];
-
+  console.log(customers);
   return (
-    <div className="ag-theme-alpine" style={{ height: 800, width: "100%" }}>
-      <input type="text" value={searchBar} onChange={handleSearch} />
-      <AddCustomer />
+    <div className="ag-theme-alpine" style={{ height: 600 }}>
+      <AddCustomer
+        customers={customers}
+        handleSearch={handleSearch}
+        searchBar={searchBar}
+      />
       <AgGridReact
         frameworkComponents={frameworkComponents}
         ref={grid}

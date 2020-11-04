@@ -64,14 +64,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ActionsRenderer =  (props) => {
+const ActionsRenderer = (props) => {
   const classes = useStyles();
   const { valueOne } = useContext(MyContext);
 
   const [, setCustomers] = valueOne;
 
-  let [editing, setEditing] = useState(false);
-  let [disabled, setDisabled] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+
   const [selfCustomer, setSelfCustomer] = useState({});
   const [open, setOpen] = useState(false);
   const [training, setTraining] = useState([]);
@@ -82,7 +83,8 @@ const ActionsRenderer =  (props) => {
     //Modal Open
     setOpen(false);
   };
-
+  const [startValue, setStartValue] = useState({});
+  const [buttonClicked, setbuttonClicked] = useState(false);
   // custom hook
   useComponentWillMount(() => {
     let editingCells = props.api.getEditingCells();
@@ -94,89 +96,66 @@ const ActionsRenderer =  (props) => {
   useEffect(() => {
     props.api.addEventListener("rowEditingStarted", onRowEditingStarted);
     props.api.addEventListener("rowEditingStopped", onRowEditingStopped);
-    
 
     return () => {
       props.api.removeEventListener("rowEditingStarted", onRowEditingStarted);
       props.api.removeEventListener("rowEditingStopped", onRowEditingStopped);
-
     };
-  }, );
-
+  });
 
   const fetchUpdate = (link, object) => {
     fetch(link, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Content-Type':'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(object)
+      body: JSON.stringify(object),
     })
-    .then(key => console.log('key',key))
-    .then(key => {
-    
-      reFetch()
-    })
-    .catch(err => console.error(err))  
+      .then((key) => console.log("key", key))
+      .then((key) => {
+        reFetch();
+      })
+      .catch((err) => console.error(err));
+  };
+
+  function stop(param) {
+    fetchUpdate(param.data.links[1].href, param.data);
   }
 
-  const [stopedit,setstopEdit] = useState({})
-  
-
-  function start(param){
-    console.log(param.data,'start')
-    
-  }
-  function stop(param){
-    
-    
-    fetchUpdate(param.data.links[1].href,param.data)
-    
-    setstopEdit(param.data)
-  }
- 
   function onRowEditingStarted(params) {
-    console.log(params)
+    const previousData = JSON.parse(JSON.stringify(params.node.data));
+
+    setStartValue(previousData);
     if (props.node === params.node) {
       setEditing(true);
-     
     } else {
       setDisabled(true);
-      
     }
   }
 
-  
-
   function onRowEditingStopped(params) {
-    
-    console.log(params)
+    if (!buttonClicked) {
+      params.node.setData(startValue);
+    }
     if (props.node === params.node) {
       if (isEmptyRow(params.data)) {
       } else {
         setEditing(false);
-        
       }
     } else {
       setDisabled(false);
-      
     }
   }
 
   function startEditing() {
-    props.api.addEventListener("rowEditingStopped", start);
     props.api.startEditingCell({
       rowIndex: props.rowIndex,
       colKey: props.column.colId,
     });
-   
-    
-    props.api.addEventListener("rowEditingStarted", start);
-    
   }
 
   function stopEditing(bool) {
-    console.log(props);
+    setbuttonClicked(true);
     props.api.stopEditing(bool);
   }
 
@@ -209,7 +188,6 @@ const ActionsRenderer =  (props) => {
     fetchCustomerTraining(props.data.links[2].href);
 
     setOpen(true);
-    console.log("train", props);
   }
 
   const handleOpenDialog = () => {
@@ -224,8 +202,6 @@ const ActionsRenderer =  (props) => {
     setOpenDialog(false);
   };
   const handleDeleteItem = () => {
-    console.log("i delete this: ", deleteCustomer);
-
     fetchDelete(deleteCustomer);
     setOpenDialog(false);
   };
@@ -247,14 +223,13 @@ const ActionsRenderer =  (props) => {
       .catch((err) => console.error(err));
   };
 
-
-  
   const handleUpdateItem = () => {
-   
+    setbuttonClicked(true);
     props.api.addEventListener("rowEditingStopped", stop);
-    console.log('update this',stopedit)
-  stopEditing(false)
+
+    stopEditing(false);
   };
+
   return (
     <div>
       <Button
@@ -334,4 +309,4 @@ const ActionsRenderer =  (props) => {
   );
 };
 
-export default  ActionsRenderer 
+export default ActionsRenderer;
