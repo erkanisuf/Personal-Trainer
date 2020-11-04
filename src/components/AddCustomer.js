@@ -9,7 +9,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import AddIcon from "@material-ui/icons/Add";
 import PlaylistAddCheckIcon from "@material-ui/icons/PlaylistAddCheck";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { MyContext } from "../Context/Context";
 
 const useStyles = makeStyles((theme) => ({
@@ -64,48 +64,101 @@ export default function FormDialog({ customers, handleSearch, searchBar }) {
 
   const handleClose = () => {
     setOpen(false);
+    setErrorBool({
+      firstname: true,
+      lastname: true,
+      city: true,
+      email: true,
+      phone: true,
+      streetaddress: true,
+      postcode: true,
+    });
+    setForm({
+      firstname: "",
+      lastname: "",
+      city: "",
+      email: "",
+      phone: "",
+      streetaddress: "",
+      postcode: "",
+    });
   };
 
   const handleForm = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    if (form[e.target.name].length <= 4 || form[e.target.name].length >= 12) {
-      console.log("First name beween 4-12");
-      setErrorBool({ ...errorBool, [e.target.name]: true });
-    } else {
-      console.log("good man");
+    console.log(form[e.target.name].length);
+    if (
+      form[e.target.name].length >= 3 &&
+      form[e.target.name].length < 20 &&
+      e.target.value !== ""
+    ) {
       setErrorBool({ ...errorBool, [e.target.name]: false });
+    } else {
+      setErrorBool({ ...errorBool, [e.target.name]: true });
     }
-    // if (form.firstname.value.length <= 4 || form.firstname.value.length >= 12) {
-    //   setErrorBool({ ...errorBool, firstname: true });
-    // } else {
-    //   setErrorBool({ ...errorBool, firstname: true });
-    // }
-
-    // if (
-    //   errorBool.firstname ||
-    //   errorBool.lastname ||
-    //   errorBool.city ||
-    //   errorBool.email ||
-    //   errorBool.phone ||
-    //   errorBool.streetaddress ||
-    //   errorBool.postcode
-    // ) {
-    //   // setSend(false);
-    // } else {
-    //   // setSend(true);
-    // }
   };
-  // const [send, setSend] = useState(false);
-
   const [errorBool, setErrorBool] = useState({
-    firstname: false,
-    lastname: false,
-    city: false,
-    email: false,
-    phone: false,
-    streetaddress: false,
-    postcode: false,
+    firstname: true,
+    lastname: true,
+    email: true,
+    phone: true,
+    streetaddress: true,
+    postcode: true,
+    city: true,
   });
+  useEffect(() => {
+    const formErrorsCHeck = () => {
+      if (form.firstname.length >= 3 && form.firstname.length < 20) {
+        setErrorBool({
+          ...errorBool,
+          firstname: false,
+        });
+      }
+      if (form.lastname.length >= 3 && form.lastname.length < 20) {
+        setErrorBool({
+          ...errorBool,
+
+          lastname: false,
+        });
+      }
+      if (form.email.length >= 3 && form.email.length < 20) {
+        setErrorBool({
+          ...errorBool,
+
+          email: false,
+        });
+      }
+      if (form.phone.length >= 3 && form.phone.length < 20) {
+        setErrorBool({
+          ...errorBool,
+
+          phone: false,
+        });
+      }
+      if (form.city.length >= 3 && form.city.length < 20) {
+        setErrorBool({
+          ...errorBool,
+
+          city: false,
+        });
+      }
+      if (form.streetaddress.length >= 3 && form.streetaddress.length < 20) {
+        setErrorBool({
+          ...errorBool,
+
+          streetaddress: false,
+        });
+      }
+
+      if (form.postcode.length >= 3 && form.postcode.length < 20) {
+        setErrorBool({
+          ...errorBool,
+          postcode: false,
+        });
+      }
+    };
+    formErrorsCHeck();
+  }, [form]);
 
   const reFetch = () => {
     fetch("https://customerrest.herokuapp.com/api/customers")
@@ -117,39 +170,57 @@ export default function FormDialog({ customers, handleSearch, searchBar }) {
   };
 
   const fetchAddNewCustomer = () => {
-    if (form.firstname.length <= 4 || form.firstname.length >= 12) {
-      console.log("First name beween 4-12");
-      setErrorBool({ ...errorBool, firstname: true });
-    }
-    if (form.lastname.length <= 4 || form.lastname.length >= 12) {
-      console.log("LastName name beween 4-12");
-      setErrorBool({ ...errorBool, lastname: true });
-    }
-    if (form.phone.length <= 4 || form.phone.length >= 12) {
-      console.log("Phone required 4-12");
-      setErrorBool({ ...errorBool, phone: true });
-    }
-    if (form.email.length <= 4 || form.email.length >= 12) {
-      console.log("email required 4-12");
-      setErrorBool({ ...errorBool, email: true });
+    if (
+      errorBool.firstname ||
+      errorBool.lastname ||
+      errorBool.email ||
+      errorBool.phone ||
+      errorBool.streetaddress ||
+      errorBool.postcode ||
+      errorBool.city
+    ) {
+      console.log("error");
     } else {
-      console.log("good man");
+      console.log("can send");
+      sendAfterForm();
     }
-    // fetch(`https://customerrest.herokuapp.com/api/customers`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(form),
-    // })
-    //   .then((key) => console.log("key", key))
-    //   .then((key) => {
-    //     console.log("Succ", key);
-    //     reFetch();
-    //     setOpen(false);
-    //   })
-    //   .catch((err) => console.error(err));
   };
+  const sendAfterForm = () => {
+    console.log("NOW SENDS MAN");
+    fetch(`https://customerrest.herokuapp.com/api/customers`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    })
+      .then((key) => console.log("key", key))
+      .then((key) => {
+        console.log("Succ", key);
+        setErrorBool({
+          firstname: true,
+          lastname: true,
+          city: true,
+          email: true,
+          phone: true,
+          streetaddress: true,
+          postcode: true,
+        });
+        setForm({
+          firstname: "",
+          lastname: "",
+          city: "",
+          email: "",
+          phone: "",
+          streetaddress: "",
+          postcode: "",
+        });
+        reFetch();
+        setOpen(false);
+      })
+      .catch((err) => console.error(err));
+  };
+
   return (
     <div>
       <Grid
@@ -208,9 +279,7 @@ export default function FormDialog({ customers, handleSearch, searchBar }) {
             label="First Name"
             type="text"
             error={errorBool.firstname}
-            helperText={
-              errorBool.firstname.bool ? "Required 4-12chars" : "Required"
-            }
+            helperText={errorBool.firstname ? "Required 4-20chars" : "Required"}
             fullWidth
           />
           <TextField
@@ -221,7 +290,7 @@ export default function FormDialog({ customers, handleSearch, searchBar }) {
             label="Last Name"
             type="text"
             error={errorBool.lastname}
-            helperText={errorBool.lastname ? "Required 4-12chars" : "Required"}
+            helperText={errorBool.lastname ? "Required 4-20chars" : "Required"}
             fullWidth
           />
           <TextField
@@ -232,7 +301,7 @@ export default function FormDialog({ customers, handleSearch, searchBar }) {
             label="Email Address"
             type="email"
             error={errorBool.email}
-            helperText={errorBool.email ? "Required 4-12chars" : "Required"}
+            helperText={errorBool.email ? "Required 4-20chars" : "Required"}
             fullWidth
           />
           <div
@@ -251,7 +320,7 @@ export default function FormDialog({ customers, handleSearch, searchBar }) {
               label="Phone"
               type="phone"
               error={errorBool.phone}
-              helperText={errorBool.phone ? "Required 4-12chars" : "Required"}
+              helperText={errorBool.phone ? "Required 4-20chars" : "Required"}
               fullWidth
             />
             <TextField
@@ -261,6 +330,8 @@ export default function FormDialog({ customers, handleSearch, searchBar }) {
               name="city"
               label="City"
               type="text"
+              error={errorBool.city}
+              helperText={errorBool.city ? "Required 4-20chars" : "Required"}
               fullWidth
             />
             <TextField
@@ -270,6 +341,10 @@ export default function FormDialog({ customers, handleSearch, searchBar }) {
               name="streetaddress"
               label="Street"
               type="text"
+              error={errorBool.streetaddress}
+              helperText={
+                errorBool.streetaddress ? "Required 4-20chars" : "Required"
+              }
               fullWidth
             />
             <TextField
@@ -279,6 +354,10 @@ export default function FormDialog({ customers, handleSearch, searchBar }) {
               name="postcode"
               label="PostCode"
               type="text"
+              error={errorBool.postcode}
+              helperText={
+                errorBool.postcode ? "Required 4-20chars" : "Required"
+              }
               fullWidth
             />
           </div>

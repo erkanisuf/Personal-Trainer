@@ -101,7 +101,10 @@ const ActionsRenderer = (props) => {
       props.api.removeEventListener("rowEditingStarted", onRowEditingStarted);
       props.api.removeEventListener("rowEditingStopped", onRowEditingStopped);
     };
+    
   });
+
+  
 
   const fetchUpdate = (link, object) => {
     fetch(link, {
@@ -113,7 +116,9 @@ const ActionsRenderer = (props) => {
     })
       .then((key) => console.log("key", key))
       .then((key) => {
-        reFetch();
+        
+        reFetch()
+        window.location.reload(); // Cant figure OUT THIS THING its so buggy thats why reload -_-
       })
       .catch((err) => console.error(err));
   };

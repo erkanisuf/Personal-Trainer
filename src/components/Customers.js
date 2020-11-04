@@ -117,7 +117,7 @@ const Customers = () => {
       ],
     },
   ];
-  console.log(customers);
+
   return (
     <div className="ag-theme-alpine" style={{ height: 600 }}>
       <AddCustomer
