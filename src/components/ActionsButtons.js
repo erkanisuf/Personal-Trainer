@@ -66,8 +66,8 @@ const useStyles = makeStyles((theme) => ({
 
 const ActionsRenderer = (props) => {
   const classes = useStyles();
-  const { valueOne } = useContext(MyContext);
-
+  const { valueOne, valueTwo } = useContext(MyContext);
+  const [train] = valueTwo;
   const [, setCustomers] = valueOne;
 
   const [editing, setEditing] = useState(false);
@@ -101,10 +101,12 @@ const ActionsRenderer = (props) => {
       props.api.removeEventListener("rowEditingStarted", onRowEditingStarted);
       props.api.removeEventListener("rowEditingStopped", onRowEditingStopped);
     };
-    
   });
-
-  
+  const [reFire, setReFire] = useState(1);
+  useEffect(() => {
+    reFetch();
+    setbuttonClicked(false);
+  }, [reFire]);
 
   const fetchUpdate = (link, object) => {
     fetch(link, {
@@ -116,9 +118,10 @@ const ActionsRenderer = (props) => {
     })
       .then((key) => console.log("key", key))
       .then((key) => {
-        
-        reFetch()
-        window.location.reload(); // Cant figure OUT THIS THING its so buggy thats why reload -_-
+        // reFetch();
+        setbuttonClicked(false);
+        setReFire(2);
+        // window.location.reload(); // Cant figure OUT THIS THING its so buggy thats why reload -_-
       })
       .catch((err) => console.error(err));
   };
@@ -188,6 +191,11 @@ const ActionsRenderer = (props) => {
       })
       .catch((err) => console.error(err));
   };
+
+  useEffect(() => {
+    fetchCustomerTraining(props.data.links[2].href);
+  }, [train, props.data.links]);
+
   function handleClick() {
     setSelfCustomer(props.data);
     fetchCustomerTraining(props.data.links[2].href);

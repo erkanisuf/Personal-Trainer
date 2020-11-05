@@ -7,7 +7,7 @@ import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 
 import AddCustomer from "./AddCustomer";
-import ActionsRenderer from "./ActionsRenderer";
+import ActionsButtons from "./ActionsButtons";
 
 const Customers = () => {
   const grid = useRef();
@@ -23,7 +23,7 @@ const Customers = () => {
   const [customers] = valueOne;
 
   const frameworkComponents = {
-    actionsRenderer: ActionsRenderer,
+    actionsRenderer: ActionsButtons,
   };
 
   const [searchBar, setsearchBar] = useState("");

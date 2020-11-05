@@ -13,6 +13,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import CloseIcon from "@material-ui/icons/Close";
+import AddTraining from "./AddTraining";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -98,7 +99,9 @@ const ModalCustomers = ({ open, handleClose, training, user }) => {
                       </TableCell>
                       <TableCell align="right">{key.duration}</TableCell>
                       <TableCell align="right">
-                        <Moment format="YYYY/MM/DD">{key.date}</Moment>
+                        <Moment format=" DD/MM/YYYY,h:mm:ss a">
+                          {key.date}
+                        </Moment>
                       </TableCell>
                     </TableRow>
                   ) : (
@@ -110,6 +113,7 @@ const ModalCustomers = ({ open, handleClose, training, user }) => {
               </TableBody>
             </Table>
           </TableContainer>
+          <AddTraining customer={user} />
         </Grid>
         <Grid container justify="flex-end" alignItems="flex-end">
           <Button
