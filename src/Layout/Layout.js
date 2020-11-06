@@ -15,6 +15,9 @@ const Layout = (props) => {
           <li>
             <Link to="/trainings">Trainings</Link>
           </li>
+          <li>
+            <Link to="/calendar">Calendar</Link>
+          </li>
         </ul>
       </nav>
 

@@ -21,6 +21,12 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: "#f44336",
     },
+    "@media (max-width:1024px)": {
+      margin: theme.spacing(0),
+      width: "5px",
+      fontSize: "0px",
+      padding: "-50px",
+    },
   },
   green: {
     margin: theme.spacing(1),
@@ -30,6 +36,12 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#3b6120",
     "&:hover": {
       backgroundColor: "#4caf50",
+    },
+    "@media (max-width:1024px)": {
+      margin: theme.spacing(0),
+      width: "5px",
+      fontSize: "0px",
+      padding: "-50px",
     },
   },
 
@@ -41,6 +53,12 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#6e6d19",
     "&:hover": {
       backgroundColor: "#ffc107",
+    },
+    "@media (max-width:1024px)": {
+      margin: theme.spacing(0),
+      width: "5px",
+      fontSize: "0px",
+      padding: "-50px",
     },
   },
   update: {
@@ -68,7 +86,7 @@ const ActionsRenderer = (props) => {
   const classes = useStyles();
   const { valueOne, valueTwo } = useContext(MyContext);
   const [train] = valueTwo;
-  const [, setCustomers] = valueOne;
+  const [customers, setCustomers] = valueOne;
 
   const [editing, setEditing] = useState(false);
   const [disabled, setDisabled] = useState(false);
@@ -194,7 +212,7 @@ const ActionsRenderer = (props) => {
 
   useEffect(() => {
     fetchCustomerTraining(props.data.links[2].href);
-  }, [train, props.data.links]);
+  }, [train, props.data.links, customers]);
 
   function handleClick() {
     setSelfCustomer(props.data);
@@ -244,7 +262,7 @@ const ActionsRenderer = (props) => {
   };
 
   return (
-    <div>
+    <div style={{ width: "50%" }}>
       <Button
         startIcon={<DeleteIcon />}
         className={classes.margin}
@@ -296,6 +314,7 @@ const ActionsRenderer = (props) => {
           </Button>
         </>
       )}
+
       <Button
         startIcon={<FitnessCenterIcon />}
         className={classes.green}

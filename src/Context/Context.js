@@ -6,6 +6,7 @@ const Context = (props) => {
   const [loading, setLoading] = useState(false);
   const [customers, setCustomers] = useState([]);
   const [train, setTrain] = useState({});
+  const [trainloading, settrainLoading] = useState(false);
 
   useEffect(() => {
     fetch("https://customerrest.herokuapp.com/api/customers", {
@@ -21,8 +22,8 @@ const Context = (props) => {
         return res.json();
       })
       .then((data) => {
-        setCustomers(data.content);
         setLoading(true);
+        setCustomers(data.content);
       })
       .catch((err) => console.error(err));
   }, []);
@@ -42,13 +43,12 @@ const Context = (props) => {
       })
       .then((data) => {
         setTrain(data.content);
-
-        setLoading(true);
+        settrainLoading(true);
       })
       .catch((err) => console.error(err));
   }, []);
 
-  if (!loading) {
+  if (!loading || !trainloading) {
     return <h1> Loading...</h1>;
   } else
     return (

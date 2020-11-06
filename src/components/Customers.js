@@ -15,6 +15,12 @@ const Customers = () => {
   const [gridApi, setGridApi] = useState(null);
 
   const onGridReady = (params) => {
+    if (window.innerWidth <= 480) {
+      params.api.setColumnDefs(mobileColum);
+    } else {
+      params.api.setColumnDefs(columns);
+    }
+
     setGridApi(params.api);
   };
 
@@ -31,6 +37,37 @@ const Customers = () => {
     setsearchBar(e.target.value);
     gridApi.setQuickFilter(e.target.value);
   };
+
+  const mobileColum = [
+    {
+      headerName: "Actions",
+      colId: "actions",
+      cellRenderer: "actionsRenderer",
+
+      editable: false,
+      filter: false,
+      sortable: false,
+
+      resizable: true,
+      width: 200,
+    },
+    {
+      headerName: "Customers",
+      resizable: true,
+      children: [
+        {
+          headerName: "FirstName",
+          field: "firstname",
+          width: 200,
+          sortable: true,
+
+          filter: "agTextColumnFilter",
+
+          resizable: true,
+        },
+      ],
+    },
+  ];
 
   const columns = [
     {
