@@ -60,25 +60,13 @@ const useStyles = makeStyles((theme) => ({
 
 const ModalCustomers = ({ open, handleClose, training, user }) => {
   const classes = useStyles();
-  const { valueOne } = useContext(MyContext);
-
-  const [, setCustomers] = valueOne;
+  const { valueThree } = useContext(MyContext);
   const [openAdd, setopenAdd] = useState(false);
-
-  const reFetch = () => {
-    fetch("https://customerrest.herokuapp.com/api/customers")
-      .then((res) => res.json())
-      .then((data) => {
-        setCustomers(data.content);
-      })
-      .catch((err) => console.error(err));
-  };
-
   const fetchdeleteTrain = (param) => {
     fetch(`${param}`, { method: "DELETE" })
       .then((data) => {
         console.log(data, "deleted");
-        reFetch();
+        valueThree();
       })
       .catch((err) => console.error(err));
   };
@@ -176,7 +164,6 @@ const ModalCustomers = ({ open, handleClose, training, user }) => {
                         <IconButton
                           aria-label="delete"
                           className={classes.delete}
-                          // onClick={() => fetchDeleteTrain(key.links[0].href)}
                           onClick={() => handleOpenDialog(key)}
                         >
                           <DeleteIcon />

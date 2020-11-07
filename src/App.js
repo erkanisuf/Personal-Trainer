@@ -3,6 +3,7 @@ import Layout from "./Layout/Layout";
 import Customers from "./components/Customers";
 import Calendar from "./components/Calendar";
 import { Switch, Route } from "react-router-dom";
+import TrainerSelectCustomer from "./components/TrainerSelectCustomer";
 function App() {
   return (
     <Layout>
@@ -15,7 +16,9 @@ function App() {
             <Route path="/customers">
               <Customers />
             </Route>
-            <Route path="/trainings"></Route>
+            <Route path="/trainings">
+              <TrainerSelectCustomer />
+            </Route>
             <Route path="/calendar">
               <Calendar />
             </Route>

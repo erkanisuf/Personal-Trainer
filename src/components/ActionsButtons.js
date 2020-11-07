@@ -84,9 +84,9 @@ const useStyles = makeStyles((theme) => ({
 
 const ActionsRenderer = (props) => {
   const classes = useStyles();
-  const { valueOne, valueTwo } = useContext(MyContext);
+  const { valueOne, valueTwo, valueThree } = useContext(MyContext);
   const [train] = valueTwo;
-  const [customers, setCustomers] = valueOne;
+  const [customers] = valueOne;
 
   const [editing, setEditing] = useState(false);
   const [disabled, setDisabled] = useState(false);
@@ -122,7 +122,7 @@ const ActionsRenderer = (props) => {
   });
   const [reFire, setReFire] = useState(1);
   useEffect(() => {
-    reFetch();
+    valueThree();
     setbuttonClicked(false);
   }, [reFire]);
 
@@ -236,20 +236,12 @@ const ActionsRenderer = (props) => {
     fetchDelete(deleteCustomer);
     setOpenDialog(false);
   };
-  const reFetch = () => {
-    fetch("https://customerrest.herokuapp.com/api/customers")
-      .then((res) => res.json())
-      .then((data) => {
-        setCustomers(data.content);
-      })
-      .catch((err) => console.error(err));
-  };
 
   const fetchDelete = (param) => {
     fetch(`${param}`, { method: "DELETE" })
       .then((data) => {
         console.log(data, "deleted");
-        reFetch();
+        valueThree();
       })
       .catch((err) => console.error(err));
   };

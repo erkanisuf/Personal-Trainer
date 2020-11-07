@@ -45,9 +45,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function FormDialog({ customers, handleSearch, searchBar }) {
   const classes = useStyles();
-  const { valueOne } = useContext(MyContext);
+  const { valueThree } = useContext(MyContext);
 
-  const [, setCustomers] = valueOne;
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({
     firstname: "",
@@ -160,15 +159,6 @@ export default function FormDialog({ customers, handleSearch, searchBar }) {
     formErrorsCHeck();
   }, [form]);
 
-  const reFetch = () => {
-    fetch("https://customerrest.herokuapp.com/api/customers")
-      .then((res) => res.json())
-      .then((data) => {
-        setCustomers(data.content);
-      })
-      .catch((err) => console.error(err));
-  };
-
   const fetchAddNewCustomer = () => {
     if (
       errorBool.firstname ||
@@ -215,7 +205,7 @@ export default function FormDialog({ customers, handleSearch, searchBar }) {
           streetaddress: "",
           postcode: "",
         });
-        reFetch();
+        valueThree();
         setOpen(false);
       })
       .catch((err) => console.error(err));

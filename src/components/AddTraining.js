@@ -20,8 +20,7 @@ const useStyles = makeStyles((theme) => ({
 
 const AddTraining = ({ customer }) => {
   const classes = useStyles();
-  const { valueTwo } = useContext(MyContext);
-  const [, setTrain] = valueTwo;
+  const { valueThree } = useContext(MyContext);
 
   const [trainingSend, setTrainignSend] = useState({
     date: new Date(),
@@ -71,30 +70,12 @@ const AddTraining = ({ customer }) => {
         .then((key) => console.log("key", key))
         .then((key) => {
           console.log("Succ", key);
-          reFetchTrains();
+          valueThree();
         })
         .catch((err) => console.error(err));
     }
   };
 
-  const reFetchTrains = () => {
-    fetch("https://customerrest.herokuapp.com/api/trainings", {
-      credentials: "same-origin",
-      headers: {
-        accept: "application/json",
-      },
-    })
-      .then((res) => {
-        if (!res.ok)
-          return Promise.reject(new Error(`HTTP Error ${res.status}`));
-
-        return res.json();
-      })
-      .then((data) => {
-        setTrain(data.content);
-      })
-      .catch((err) => console.error(err));
-  };
   const [selectedDate, setSelectedDate] = useState(new Date());
   const datePicker = (date) => {
     setTrainignSend({ ...trainingSend, date: date._d });

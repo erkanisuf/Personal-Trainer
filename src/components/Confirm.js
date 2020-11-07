@@ -17,7 +17,6 @@ function Confirm({
   user,
   trainings,
 }) {
-  console.log(trainings, "from confirm");
   return (
     <div>
       <Dialog
