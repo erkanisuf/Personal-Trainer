@@ -3,6 +3,7 @@ import { DataGrid } from "@material-ui/data-grid";
 import { MyContext } from "../../Context/Context";
 import CustomerTrain from "./CustomerTrain";
 import NewTraining from "./NewTraining";
+import LinearProgress from "@material-ui/core/LinearProgress";
 const Trainings = () => {
   const { valueOne, valueTwo, valueThree } = useContext(MyContext);
   const [customer] = valueOne;
@@ -33,10 +34,36 @@ const Trainings = () => {
     addIdtoTrainings();
   }, [contexTrain, customer]);
 
+  // renderCell: (param) => (
+  //   <LinearProgress variant="determinate" value={50} />
+  // ),
   const columns = [
     { field: "id", headerName: "ID" },
     { field: "activity", headerName: "Activity", width: 200 },
-    { field: "duration", headerName: "Duration(min)", width: 200 },
+    {
+      field: "duration",
+      headerName: "Duration",
+      width: 200,
+      renderCell: (param) => {
+        return (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              height: "100%",
+              width: "100%",
+            }}
+          >
+            {param.value + " - min"}
+            <LinearProgress
+              variant="determinate"
+              value={param.value}
+              style={{ height: "100%", width: "100%" }}
+            />
+          </div>
+        );
+      },
+    },
     { field: "date", headerName: "Date", width: 300 },
     {
       field: "customer",
