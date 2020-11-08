@@ -29,7 +29,6 @@ const AddTraining = ({ customer }) => {
     customer: customer.links[1].href,
   });
 
-  console.log(trainingSend);
   const handleTrainignText = (e) => {
     setTrainignSend({ ...trainingSend, [e.target.name]: e.target.value });
   };
@@ -81,7 +80,7 @@ const AddTraining = ({ customer }) => {
     setTrainignSend({ ...trainingSend, date: date._d });
     setSelectedDate(date._d);
   };
-
+  console.log(trainingSend);
   return (
     <div
       style={{
