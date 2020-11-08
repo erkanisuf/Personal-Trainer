@@ -228,15 +228,17 @@ export default function FormDialog({ customers, handleSearch, searchBar }) {
             flexDirection: "row",
           }}
         >
-          <TextField
-            style={{ width: "300px" }}
-            label="Filter Field"
-            margin="normal"
-            variant="outlined"
-            value={searchBar}
-            onChange={handleSearch}
-            size="small"
-          />
+          {searchBar !== undefined && (
+            <TextField
+              style={{ width: "300px" }}
+              label="Filter Field"
+              margin="normal"
+              variant="outlined"
+              value={searchBar}
+              onChange={handleSearch}
+              size="small"
+            />
+          )}
 
           <Button
             startIcon={<AddIcon />}

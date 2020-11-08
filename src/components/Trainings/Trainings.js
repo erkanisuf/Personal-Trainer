@@ -4,7 +4,7 @@ import { MyContext } from "../../Context/Context";
 import CustomerTrain from "./CustomerTrain";
 import NewTraining from "./NewTraining";
 const Trainings = () => {
-  const { valueOne, valueTwo } = useContext(MyContext);
+  const { valueOne, valueTwo, valueThree } = useContext(MyContext);
   const [customer] = valueOne;
   const [contexTrain] = valueTwo;
   const [rows, setRows] = useState([]);
@@ -46,6 +46,37 @@ const Trainings = () => {
     },
   ];
 
+  const handleSelectedRows = (param) => {
+    const rows = [];
+    param.rows.map((key) => {
+      return rows.push(key.links[1].href);
+    });
+    setSelectedRows(rows);
+  };
+  const [selectedRows, setSelectedRows] = useState([]);
+  console.log(selectedRows, "stateSELECTED");
+
+  const deleteAllArray = (param) => {
+    return Promise.all(
+      param.map((url) =>
+        fetch(url, { method: "DELETE" })
+          .then((response) => console.log(response))
+          .then((responseData) => {
+            console.log(responseData, "2ndresp");
+            valueThree();
+          })
+          .catch((err) => console.error(err))
+      )
+    ).then((responseData) => {
+      console.log(responseData);
+    });
+  };
+
+  const deleteSelected = () => {
+    deleteAllArray(selectedRows);
+    console.log("DELETESELECTED");
+  };
+
   if (!rows[0]) {
     return <p>Loading....</p>;
   } else {
@@ -57,10 +88,11 @@ const Trainings = () => {
           margin: "0 auto",
         }}
       >
+        <button onClick={deleteSelected}>DELETE SELECTED</button>
         <NewTraining />
         <DataGrid
           rows={rows}
-          onSelectionChange={(param) => console.log("rows", param)}
+          onSelectionChange={(param) => handleSelectedRows(param)}
           columns={columns}
           pageSize={5}
           checkboxSelection

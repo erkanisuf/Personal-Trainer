@@ -80,7 +80,7 @@ const AddTraining = ({ customer }) => {
     setTrainignSend({ ...trainingSend, date: date._d });
     setSelectedDate(date._d);
   };
-  console.log(trainingSend);
+
   return (
     <div
       style={{

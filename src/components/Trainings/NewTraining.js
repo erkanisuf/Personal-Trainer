@@ -8,6 +8,9 @@ import MomentUtils from "@date-io/moment";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
+import AddCustomer from "../AddCustomer";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   newtrain: {
@@ -78,6 +81,18 @@ export default function NewTraining() {
         .then((key) => {
           console.log("Succ", key);
           valueThree();
+          setTrainignSend({
+            ...trainingSend,
+            duration: parseInt(15),
+            activity: "",
+            date: new Date(),
+
+            customer: select,
+          });
+
+          setSelectedDate(new Date());
+          setSelect(null);
+          setOpensnack(true);
         })
         .catch((err) => console.error(err));
     }
@@ -97,6 +112,13 @@ export default function NewTraining() {
       setTrainignSend({ ...trainingSend, customer: event.links[1].href });
     }
   };
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+
+  const [opensnack, setOpensnack] = useState(false);
+
+  const closeSnack = () => [setOpensnack(false)];
 
   return (
     <div
@@ -123,6 +145,7 @@ export default function NewTraining() {
           }}
         >
           <Autocomplete
+            value={select}
             id="combo-box-demo"
             options={customers}
             getOptionLabel={(cust) =>
@@ -146,6 +169,7 @@ export default function NewTraining() {
               />
             )}
           />
+          <AddCustomer />
 
           <TextField
             style={{ width: "300px" }}
@@ -194,6 +218,15 @@ export default function NewTraining() {
           >
             Add Training
           </Button>
+          <Snackbar
+            open={opensnack}
+            autoHideDuration={6000}
+            onClose={closeSnack}
+          >
+            <Alert onClose={closeSnack} severity="success">
+              Sucssesfully added new Training
+            </Alert>
+          </Snackbar>
         </div>
       )}
       <button onClick={() => setOpen(!open)}>Open THis shitfl</button>
