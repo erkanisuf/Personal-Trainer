@@ -9,27 +9,71 @@ import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
 import TextField from "@material-ui/core/TextField";
 import ConfirmAll from "./ConfirmAll";
+import CancelPresentationIcon from "@material-ui/icons/CancelPresentation";
+import FitnessCenterIcon from "@material-ui/icons/FitnessCenter";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  fitnessicon: {
+    margin: theme.spacing(1),
+    marginLeft: "400px",
+    width: "160px",
+    fontSize: "14px",
+    padding: "5px",
+    height: "40px",
+    float: "right",
+    alignSelf: "flex-end",
+    justifySelf: "flex-end",
+
+    color: "white",
+    backgroundColor: "#3b6120",
+    "&:hover": {
+      backgroundColor: "#4caf50",
+    },
+  },
+  cancel: {
+    margin: theme.spacing(1),
+    marginLeft: "400px",
+    width: "1%",
+    fontSize: "25px",
+    padding: "1px",
+    height: "60px",
+
+    borderRadius: "50%",
+    alignSelf: "center",
+    color: "grey",
+
+    "&:hover": {
+      color: "red",
+    },
+  },
+}));
 
 const Trainings = () => {
+  const classes = useStyles();
   const { valueOne, valueTwo, valueThree } = useContext(MyContext);
   const [customer] = valueOne;
   const [contexTrain] = valueTwo;
   const [rows, setRows] = useState([]);
 
   const [value, setValue] = useState("");
+  const [errorFilter, seterrorFilter] = useState(false);
   useEffect(() => {
     const addIdtoTrainings = () => {
       const createArr = [];
 
-      const newArrayMake = contexTrain
-        .filter(
-          (key) =>
-            key.activity
-              .toLowerCase()
-              .trim()
-              .indexOf(value.toLowerCase().trim()) !== -1
-        )
-        .map((key, index) => {
+      const find = contexTrain.filter(
+        (key) =>
+          key.activity
+            .toLowerCase()
+            .trim()
+            .indexOf(value.toLowerCase().trim()) !== -1
+      );
+
+      if (find.length === 0) {
+        seterrorFilter(true);
+      } else {
+        const newArrayMake = find.map((key, index) => {
           const newObject = {
             id: index + 1,
             activity: key.activity,
@@ -43,8 +87,10 @@ const Trainings = () => {
 
           return newObject;
         });
-      console.log(createArr);
-      setRows(newArrayMake);
+        console.log(createArr);
+        setRows(newArrayMake);
+        seterrorFilter(false);
+      }
     };
     addIdtoTrainings();
   }, [contexTrain, customer, value]);
@@ -52,6 +98,7 @@ const Trainings = () => {
   // renderCell: (param) => (
   //   <LinearProgress variant="determinate" value={50} />
   // ),
+  const normalise = (value) => ((value - 15) * 100) / (240 - 15);
   const columns = [
     { field: "id", headerName: "ID" },
 
@@ -73,8 +120,13 @@ const Trainings = () => {
             {param.value + " - min"}
             <LinearProgress
               variant="determinate"
-              value={param.value}
-              style={{ height: "100%", width: "100%" }}
+              value={normalise(param.value)}
+              style={{
+                height: "50%",
+                width: "100%",
+                alignSelf: "center",
+                margin: "5px",
+              }}
             />
           </div>
         );
@@ -139,7 +191,10 @@ const Trainings = () => {
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
-
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => {
+    setOpen(!open);
+  };
   if (!rows[0]) {
     return <p>Loading....</p>;
   } else {
@@ -158,7 +213,80 @@ const Trainings = () => {
             margin: "0 auto",
           }}
         >
-          <NewTraining />
+          <NewTraining open={open} handleOpen={handleOpen} />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+
+              margin: "0 auto",
+
+              width: "100%",
+            }}
+          >
+            <Button
+              variant="contained"
+              color="secondary"
+              startIcon={<DeleteIcon />}
+              aria-label="Delete selected"
+              onClick={deleteSelected}
+              style={{
+                marginTop: "20px ",
+                marginLeft: "15px",
+                marginRight: "5px",
+                width: "155px",
+                fontSize: "10px",
+                height: "30px",
+              }}
+            >
+              Delete Selected
+            </Button>
+
+            <TextField
+              style={{ width: "300px" }}
+              label="Filter Activity"
+              margin="normal"
+              variant="outlined"
+              type="text"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              size="small"
+            />
+            {errorFilter && (
+              <span style={{ color: "red", marginTop: "25px" }}>
+                Not found items with keyword:{" "}
+                <b>
+                  <u>{value}</u>
+                </b>
+              </span>
+            )}
+            <Button
+              startIcon={
+                !open ? (
+                  <FitnessCenterIcon />
+                ) : (
+                  <CancelPresentationIcon style={{ transform: "scale(2)" }} />
+                )
+              }
+              aria-label="Add"
+              className={!open ? classes.fitnessicon : classes.cancel}
+              onClick={handleOpen}
+            >
+              {!open ? "New Training" : ""}
+            </Button>
+            <ConfirmAll
+              openDialog={openDialog}
+              handleCloseDialog={handleCloseDialog}
+              handleDeleteItem={() =>
+                selectedRows.length === 0
+                  ? alert("Please Select Rows")
+                  : deleteAllArray(selectedRows)
+              }
+              opensnack={opensnack}
+              closeSnack={closeSnack}
+            />
+          </div>
           <DataGrid
             rows={rows}
             onSelectionChange={(param) => handleSelectedRows(param)}
@@ -166,55 +294,6 @@ const Trainings = () => {
             pageSize={5}
             checkboxSelection
             autoPageSize={true}
-          />
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-start",
-            marginTop: "60px",
-            width: "500px",
-            alignItems: "flex-start",
-          }}
-        >
-          <Button
-            variant="contained"
-            color="secondary"
-            startIcon={<DeleteIcon />}
-            aria-label="Delete selected"
-            onClick={deleteSelected}
-            style={{
-              marginTop: "20px ",
-              marginLeft: "80px",
-              marginRight: "5px",
-              width: "155px",
-              fontSize: "10px",
-              height: "30px",
-            }}
-          >
-            Delete Selected
-          </Button>
-
-          <TextField
-            style={{ width: "300px" }}
-            label="Filter Activity"
-            margin="normal"
-            variant="outlined"
-            type="text"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            size="small"
-          />
-          <ConfirmAll
-            openDialog={openDialog}
-            handleCloseDialog={handleCloseDialog}
-            handleDeleteItem={() =>
-              selectedRows.length === 0
-                ? alert("Please Select Rows")
-                : deleteAllArray(selectedRows)
-            }
-            opensnack={opensnack}
-            closeSnack={closeSnack}
           />
         </div>
       </div>

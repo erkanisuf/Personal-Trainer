@@ -63,46 +63,39 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function NewTraining({ open, handleOpen }) {
+export default function CalendarNewTrain({
+  open,
+  handleOpen,
+  startvalue,
+  datePicker,
+  handleNumber,
+  handleClose,
+  handleTrainignText,
+  reNewStates,
+  select,
+}) {
   const { valueOne } = useContext(MyContext);
-
+  console.log(startvalue);
   const [customers] = valueOne;
-  const [select, setSelect] = useState(null);
 
   const classes = useStyles();
   const { valueThree } = useContext(MyContext);
 
-  const [trainingSend, setTrainignSend] = useState({
-    date: new Date(),
-    duration: 15,
-    activity: "",
-    customer: select,
-  });
-
-  const handleTrainignText = (e) => {
-    setTrainignSend({ ...trainingSend, [e.target.name]: e.target.value });
-  };
-  const handleNumber = (e) => {
-    setTrainignSend({ ...trainingSend, duration: parseInt(e.target.value) });
-  };
   const [actError, setActError] = useState(false);
   const [numError, setNumError] = useState(false);
   useEffect(() => {
-    if (
-      trainingSend.activity.length >= 4 &&
-      trainingSend.activity.length < 20
-    ) {
+    if (startvalue.activity.length >= 4 && startvalue.activity.length < 20) {
       setActError(false);
     } else {
       setActError(true);
     }
 
-    if (trainingSend.duration >= 15 && trainingSend.duration < 600) {
+    if (startvalue.duration >= 15 && startvalue.duration < 600) {
       setNumError(false);
     } else {
       setNumError(true);
     }
-  }, [trainingSend]);
+  }, [startvalue]);
 
   const addNewTraining = () => {
     if (actError || numError || select === null) {
@@ -114,43 +107,19 @@ export default function NewTraining({ open, handleOpen }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(trainingSend),
+        body: JSON.stringify(startvalue),
       })
         .then((key) => console.log("key", key))
         .then((key) => {
           console.log("Succ", key);
           valueThree();
-          setTrainignSend({
-            ...trainingSend,
-            duration: parseInt(15),
-            activity: "",
-            date: new Date(),
 
-            customer: select,
-          });
-
-          setSelectedDate(new Date());
-          setSelect(null);
-          setOpensnack(true);
+          handleClose();
         })
         .catch((err) => console.error(err));
     }
   };
 
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const datePicker = (date) => {
-    setTrainignSend({ ...trainingSend, date: date._d });
-    setSelectedDate(date._d);
-  };
-
-  const reNewStates = (event) => {
-    setSelect(event);
-    if (event === null) {
-      console.log("its nul man");
-    } else {
-      setTrainignSend({ ...trainingSend, customer: event.links[1].href });
-    }
-  };
   function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
@@ -218,7 +187,7 @@ export default function NewTraining({ open, handleOpen }) {
             name="activity"
             margin="normal"
             variant="outlined"
-            value={trainingSend.activity}
+            value={startvalue.activity}
             onChange={handleTrainignText}
             size="small"
             error={actError}
@@ -230,7 +199,7 @@ export default function NewTraining({ open, handleOpen }) {
             margin="normal"
             size="small"
             className={classes.margins}
-            value={trainingSend.duration}
+            value={startvalue.duration}
             onChange={handleNumber}
             label="Duration(min)"
             type="number"
@@ -247,8 +216,8 @@ export default function NewTraining({ open, handleOpen }) {
               margin="normal"
               size="small"
               className={classes.calendar}
-              value={selectedDate}
-              onChange={(date) => datePicker(date)}
+              value={startvalue.date}
+              onChange={datePicker}
               helperText={"Choose a date and time"}
             />
           </MuiPickersUtilsProvider>

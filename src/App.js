@@ -1,7 +1,7 @@
 import "./App.css";
 import Layout from "./Layout/Layout";
 import Customers from "./components/Customers";
-import Calendar from "./components/Calendar";
+import Calendar from "./components/Calendar/Calendar";
 import { Switch, Route } from "react-router-dom";
 import Trainings from "./components/Trainings/Trainings";
 
