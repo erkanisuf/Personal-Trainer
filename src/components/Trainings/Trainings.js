@@ -7,7 +7,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Moment from "react-moment";
 import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
-
+import TextField from "@material-ui/core/TextField";
 import ConfirmAll from "./ConfirmAll";
 
 const Trainings = () => {
@@ -16,29 +16,38 @@ const Trainings = () => {
   const [contexTrain] = valueTwo;
   const [rows, setRows] = useState([]);
 
+  const [value, setValue] = useState("");
   useEffect(() => {
     const addIdtoTrainings = () => {
       const createArr = [];
 
-      const newArrayMake = contexTrain.map((key, index) => {
-        const newObject = {
-          id: index + 1,
-          activity: key.activity,
-          duration: key.duration,
-          date: key.date,
-          customer: key.links[2].href,
-          links: key.links,
-        };
+      const newArrayMake = contexTrain
+        .filter(
+          (key) =>
+            key.activity
+              .toLowerCase()
+              .trim()
+              .indexOf(value.toLowerCase().trim()) !== -1
+        )
+        .map((key, index) => {
+          const newObject = {
+            id: index + 1,
+            activity: key.activity,
+            duration: key.duration,
+            date: key.date,
+            customer: key.links[2].href,
+            links: key.links,
+          };
 
-        createArr.push(newObject);
+          createArr.push(newObject);
 
-        return newObject;
-      });
+          return newObject;
+        });
       console.log(createArr);
       setRows(newArrayMake);
     };
     addIdtoTrainings();
-  }, [contexTrain, customer]);
+  }, [contexTrain, customer, value]);
 
   // renderCell: (param) => (
   //   <LinearProgress variant="determinate" value={50} />
@@ -130,6 +139,7 @@ const Trainings = () => {
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
+
   if (!rows[0]) {
     return <p>Loading....</p>;
   } else {
@@ -143,7 +153,7 @@ const Trainings = () => {
       >
         <div
           style={{
-            height: 450,
+            height: 500,
             width: window.innerWidth <= 480 ? "100%" : "90%",
             margin: "0 auto",
           }}
@@ -155,13 +165,14 @@ const Trainings = () => {
             columns={columns}
             pageSize={5}
             checkboxSelection
+            autoPageSize={true}
           />
         </div>
         <div
           style={{
             display: "flex",
             justifyContent: "flex-start",
-            marginTop: "25px",
+            marginTop: "60px",
             width: "500px",
             alignItems: "flex-start",
           }}
@@ -172,10 +183,28 @@ const Trainings = () => {
             startIcon={<DeleteIcon />}
             aria-label="Delete selected"
             onClick={deleteSelected}
-            style={{ marginLeft: "80px" }}
+            style={{
+              marginTop: "20px ",
+              marginLeft: "80px",
+              marginRight: "5px",
+              width: "155px",
+              fontSize: "10px",
+              height: "30px",
+            }}
           >
             Delete Selected
           </Button>
+
+          <TextField
+            style={{ width: "300px" }}
+            label="Filter Activity"
+            margin="normal"
+            variant="outlined"
+            type="text"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            size="small"
+          />
           <ConfirmAll
             openDialog={openDialog}
             handleCloseDialog={handleCloseDialog}
