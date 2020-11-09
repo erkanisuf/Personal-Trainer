@@ -1,13 +1,18 @@
-import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
+import AddIcon from "@material-ui/icons/Add";
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import AddIcon from "@material-ui/icons/Add";
+import IconButton from "@material-ui/core/IconButton";
+
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+
 import PlaylistAddCheckIcon from "@material-ui/icons/PlaylistAddCheck";
 import React, { useState, useContext, useEffect } from "react";
 import { MyContext } from "../Context/Context";
@@ -25,14 +30,24 @@ const useStyles = makeStyles((theme) => ({
   },
   newcustomer: {
     margin: theme.spacing(1),
-    width: "160px",
-    fontSize: "12px",
-    padding: "15px",
-    height: "50px",
-    alignSelf: "flex-end",
+    width: "190px",
+    fontSize: "14px",
+    padding: "10px",
+    marginTop: "10px",
     backgroundColor: "#3b6120",
     "&:hover": {
       backgroundColor: "#4caf50",
+    },
+  },
+  iconcustomer: {
+    margin: theme.spacing(1),
+    color: "#3b6120",
+    border: "1px solid #3b6120",
+    height: "40px",
+    marginTop: "-10px",
+    borderRadius: "3px",
+    "&:hover": {
+      color: "#4caf50",
     },
   },
   root: {
@@ -43,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function FormDialog({ customers, handleSearch, searchBar }) {
+export default function FormDialog({ source }) {
   const classes = useStyles();
   const { valueThree } = useContext(MyContext);
 
@@ -57,9 +72,6 @@ export default function FormDialog({ customers, handleSearch, searchBar }) {
     streetaddress: "",
     postcode: "",
   });
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
 
   const handleClose = () => {
     setOpen(false);
@@ -207,50 +219,41 @@ export default function FormDialog({ customers, handleSearch, searchBar }) {
         });
         valueThree();
         setOpen(false);
+        setOpensnack(true);
       })
       .catch((err) => console.error(err));
   };
 
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+
+  const [opensnack, setOpensnack] = useState(false);
+
+  const closeSnack = () => setOpensnack(false);
+
   return (
     <div>
-      <Grid
-        container
-        justify="flex-end"
-        alignItems="flex-end"
-        style={{ width: "90%", margin: "15px" }}
-      >
-        <div
-          style={{
-            width: "100%",
-
-            display: "flex",
-            justifyContent: "space-between",
-            flexDirection: "row",
-          }}
+      {source === "customers" ? (
+        <Button
+          startIcon={<AddIcon />}
+          className={classes.newcustomer}
+          variant="contained"
+          color="primary"
+          onClick={() => setOpen(true)}
         >
-          {searchBar !== undefined && (
-            <TextField
-              style={{ width: "300px" }}
-              label="Filter Field"
-              margin="normal"
-              variant="outlined"
-              value={searchBar}
-              onChange={handleSearch}
-              size="small"
-            />
-          )}
-
-          <Button
-            startIcon={<AddIcon />}
-            className={classes.newcustomer}
-            variant="contained"
-            color="primary"
-            onClick={handleClickOpen}
-          >
-            New Customer
-          </Button>
-        </div>
-      </Grid>
+          New Customer
+        </Button>
+      ) : (
+        <IconButton
+          aria-label="Add"
+          className={classes.iconcustomer}
+          onClick={() => setOpen(true)}
+        >
+          <PersonAddIcon fontSize="large" />
+          <span style={{ fontSize: "10px", color: "grey" }}>New Customer</span>
+        </IconButton>
+      )}
 
       <Dialog
         open={open}
@@ -369,6 +372,11 @@ export default function FormDialog({ customers, handleSearch, searchBar }) {
           </Button>
         </DialogActions>
       </Dialog>
+      <Snackbar open={opensnack} autoHideDuration={6000} onClose={closeSnack}>
+        <Alert onClose={closeSnack} severity="success">
+          New user has been created!
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

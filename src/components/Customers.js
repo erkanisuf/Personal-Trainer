@@ -5,6 +5,7 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-enterprise";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+import TextField from "@material-ui/core/TextField";
 
 import AddCustomer from "./AddCustomer";
 import ActionsButtons from "./ActionsButtons";
@@ -157,11 +158,28 @@ const Customers = () => {
 
   return (
     <div className="ag-theme-alpine" style={{ height: 600 }}>
-      <AddCustomer
-        customers={customers}
-        handleSearch={handleSearch}
-        searchBar={searchBar}
-      />
+      <div
+        style={{
+          width: "95%",
+
+          display: "flex",
+          justifyContent: "space-between",
+          flexDirection: "row",
+        }}
+      >
+        <TextField
+          style={{ width: "300px" }}
+          label="Filter Field"
+          margin="normal"
+          variant="outlined"
+          value={searchBar}
+          onChange={handleSearch}
+          size="small"
+        />
+
+        <AddCustomer source={"customers"} />
+      </div>
+
       <AgGridReact
         frameworkComponents={frameworkComponents}
         ref={grid}

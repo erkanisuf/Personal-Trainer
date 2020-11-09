@@ -12,14 +12,56 @@ import AddCustomer from "../AddCustomer";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 
+import CancelPresentationIcon from "@material-ui/icons/CancelPresentation";
+import FitnessCenterIcon from "@material-ui/icons/FitnessCenter";
+
 const useStyles = makeStyles((theme) => ({
   newtrain: {
     fontSize: "10px",
     height: "50px",
-    marginTop: "15px",
+    margin: theme.spacing(1),
     backgroundColor: "#3b6120",
     "&:hover": {
       backgroundColor: "#4caf50",
+    },
+  },
+  margins: {
+    margin: theme.spacing(1),
+  },
+  calendar: {
+    margin: "5px",
+    marginTop: "20px",
+  },
+
+  fitnessicon: {
+    margin: theme.spacing(1),
+    width: "160px",
+    fontSize: "14px",
+    padding: "5px",
+    height: "40px",
+    float: "right",
+    alignSelf: "flex-end",
+    justifySelf: "flex-end",
+
+    color: "white",
+    backgroundColor: "#3b6120",
+    "&:hover": {
+      backgroundColor: "#4caf50",
+    },
+  },
+  cancel: {
+    margin: theme.spacing(1),
+    width: "1%",
+    fontSize: "25px",
+    padding: "1px",
+    height: "60px",
+
+    borderRadius: "50%",
+    alignSelf: "center",
+    color: "grey",
+
+    "&:hover": {
+      color: "red",
     },
   },
 }));
@@ -127,7 +169,8 @@ export default function NewTraining() {
         width: "100%",
         display: "flex",
         flexDirection: "row",
-        justifyContent: "flex-end",
+        justifyContent: open ? "center" : "flex-end",
+        margin: "0 auto",
       }}
     >
       {open && (
@@ -135,12 +178,13 @@ export default function NewTraining() {
           style={{
             display: "flex",
             flexDirection: "row",
-            justifyContent: "space-between",
+            justifyContent: "space-evenly",
             alignItems: "center",
             border: "1px solid grey",
             borderRadius: "10px",
             padding: "10px",
-            width: "80%",
+
+            width: "100%",
             margin: "10px auto",
           }}
         >
@@ -188,6 +232,7 @@ export default function NewTraining() {
             name="duration"
             margin="normal"
             size="small"
+            className={classes.margins}
             value={trainingSend.duration}
             onChange={handleNumber}
             label="Duration(min)"
@@ -204,8 +249,10 @@ export default function NewTraining() {
             <DateTimePicker
               margin="normal"
               size="small"
+              className={classes.calendar}
               value={selectedDate}
               onChange={(date) => datePicker(date)}
+              helperText={"Choose a date and time"}
             />
           </MuiPickersUtilsProvider>
           <Button
@@ -229,7 +276,21 @@ export default function NewTraining() {
           </Snackbar>
         </div>
       )}
-      <button onClick={() => setOpen(!open)}>Open THis shitfl</button>
+
+      <Button
+        startIcon={
+          !open ? (
+            <FitnessCenterIcon />
+          ) : (
+            <CancelPresentationIcon style={{ transform: "scale(2)" }} />
+          )
+        }
+        aria-label="Add"
+        className={!open ? classes.fitnessicon : classes.cancel}
+        onClick={() => setOpen(!open)}
+      >
+        {!open ? "New Training" : ""}
+      </Button>
     </div>
   );
 }

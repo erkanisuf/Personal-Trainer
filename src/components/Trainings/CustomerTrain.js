@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CustomerDialog from "./CustomerDialog";
+import PersonIcon from "@material-ui/icons/Person";
+import IconButton from "@material-ui/core/IconButton";
 const CustomerTrain = ({ customer }) => {
   const [customerReady, setCustomerReady] = useState({});
   const [loading, setLoading] = useState(false);
@@ -28,11 +30,10 @@ const CustomerTrain = ({ customer }) => {
   } else {
     return (
       <div>
-        <p>
-          {customerReady.firstname},{customerReady.lastname},
-          {customerReady.email}
-          <button onClick={() => setOpenDialog(true)}>Inf</button>
-        </p>
+        <IconButton aria-label="Add" onClick={() => setOpenDialog(true)}>
+          <PersonIcon fontSize="small" />
+        </IconButton>
+        {customerReady.firstname},{customerReady.lastname},{customerReady.email}
         <CustomerDialog
           openDialog={openDialog}
           handleCloseDialog={() => setOpenDialog(false)}
