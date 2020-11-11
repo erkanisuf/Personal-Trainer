@@ -4,9 +4,34 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import { MyContext } from "../../Context/Context";
 import moment from "moment";
 import CalendarNewTrain from "./CalendarNewTrain";
+import Button from "@material-ui/core/Button";
+import FitnessCenterIcon from "@material-ui/icons/FitnessCenter";
+import { makeStyles } from "@material-ui/core/styles";
 
+import OnclickTrain from "./OnclickTrain";
 const localizer = momentLocalizer(moment);
+
+const useStyles = makeStyles((theme) => ({
+  fitnessicon: {
+    margin: theme.spacing(1),
+    marginLeft: "400px",
+    width: "160px",
+    fontSize: "14px",
+    padding: "5px",
+    height: "40px",
+
+    alignSelf: "flex-end",
+    justifySelf: "flex-end",
+
+    color: "white",
+    backgroundColor: "#3b6120",
+    "&:hover": {
+      backgroundColor: "#4caf50",
+    },
+  },
+}));
 const CalendarJS = () => {
+  const classes = useStyles();
   const { valueTwo } = useContext(MyContext);
   const [train] = valueTwo;
 
@@ -24,7 +49,7 @@ const CalendarJS = () => {
           start: new Date(key.date),
           end: endDate,
           allDay: false,
-          resource: [],
+          resource: key.links,
         };
         createArr.push(newObject);
         return newObject;
@@ -41,7 +66,7 @@ const CalendarJS = () => {
     date: new Date(),
     duration: 69,
     activity: "",
-    customer: null,
+    customer: "",
   });
   const handleTrainignText = (e) => {
     setStartValue({ ...startvalue, activity: e.target.value });
@@ -93,8 +118,36 @@ const CalendarJS = () => {
     setOpen(false);
   };
   ////NEW TRAIN///
+
+  ////// Onclick on Trainings Opens Window
+  const [opneningObj, setopeningObj] = useState({ resource: ["", "", ""] });
+  const [openOnclick, setopenOnclick] = useState(false);
+  const handleCloseOnclick = () => {
+    setopenOnclick(false);
+  };
+  const onSelectEvent = (param) => {
+    console.log(param);
+    setopenOnclick(true);
+    setopeningObj(param);
+  };
+
+  /////
   return (
-    <div>
+    <div style={{ width: "100%", display: "flex", flexDirection: "column" }}>
+      <OnclickTrain
+        handleCloseOnclick={handleCloseOnclick}
+        openOnclick={openOnclick}
+        opneningObj={opneningObj}
+      />
+      <Button
+        onClick={() => setOpen(true)}
+        color="primary"
+        variant="outlined"
+        className={classes.fitnessicon}
+        startIcon={<FitnessCenterIcon />}
+      >
+        New Training
+      </Button>
       <CalendarNewTrain
         open={open}
         startvalue={startvalue}
@@ -115,7 +168,7 @@ const CalendarJS = () => {
           startAccessor="start"
           endAccessor="end"
           showMultiDayTimes
-          onSelectEvent={(event) => alert(event.title)}
+          onSelectEvent={onSelectEvent}
           onSelectSlot={handleSelect}
           selectable={true}
         />
