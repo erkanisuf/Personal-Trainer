@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { MyContext } from "../Context/Context";
-import { useComponentWillMount } from "./utils";
+// import { useComponentWillMount } from "./utils";
 import Button from "@material-ui/core/Button";
 import EditIcon from "@material-ui/icons/Edit";
 import { makeStyles } from "@material-ui/core/styles";
@@ -86,12 +86,12 @@ const ActionsRenderer = (props) => {
   const [startValue, setStartValue] = useState({});
   const [buttonClicked, setbuttonClicked] = useState(false);
   // custom hook
-  useComponentWillMount(() => {
-    let editingCells = props.api.getEditingCells();
-    if (editingCells.length !== 0) {
-      setDisabled(true);
-    }
-  });
+  // useComponentWillMount(() => {
+  //   let editingCells = props.api.getEditingCells();
+  //   if (editingCells.length !== 0) {
+  //     setDisabled(true);
+  //   }
+  // });
 
   useEffect(() => {
     props.api.addEventListener("rowEditingStarted", onRowEditingStarted);
@@ -103,11 +103,6 @@ const ActionsRenderer = (props) => {
     };
   });
   const [reFire, setReFire] = useState(1);
-  useEffect(() => {
-    valueThree();
-    setbuttonClicked(false);
-  }, [reFire]);
-
   const fetchUpdate = (link, object) => {
     fetch(link, {
       method: "PUT",
@@ -119,13 +114,18 @@ const ActionsRenderer = (props) => {
       .then((key) => console.log("key", key))
       .then((key) => {
         // reFetch();
-        valueThree();
+        // valueThree();
         setbuttonClicked(false);
         setReFire(2);
         // window.location.reload(); // Cant figure OUT THIS THING its so buggy thats why reload -_-
       })
       .catch((err) => console.error(err));
   };
+
+  useEffect(() => {
+    valueThree();
+    setbuttonClicked(false);
+  }, [reFire]);
 
   function stop(param) {
     fetchUpdate(param.data.links[1].href, param.data);

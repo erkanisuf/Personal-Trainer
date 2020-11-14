@@ -15,9 +15,10 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-
+import BarChartIcon from "@material-ui/icons/BarChart";
 import EmojiPeopleIcon from "@material-ui/icons/EmojiPeople";
 import FitnessCenterIcon from "@material-ui/icons/FitnessCenter";
+import Paper from "@material-ui/core/Paper";
 
 import EventIcon from "@material-ui/icons/Event";
 import "../App.css";
@@ -68,6 +69,8 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flexGrow: 1,
+    backgroundColor: "#fafafa",
+    minHeight: "1000px",
     padding: theme.spacing(3),
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
@@ -177,6 +180,21 @@ const Layout = (props) => {
                   to="/calendar"
                 >
                   <EventIcon /> Calendar
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                {" "}
+                <Link
+                  style={{
+                    color: "black",
+                    textDecoration: "none",
+                    width: "100%",
+                    height: "100%",
+                    padding: "10px",
+                  }}
+                  to="/datastats"
+                >
+                  <BarChartIcon /> Data Stats
                 </Link>
               </MenuItem>
             </Menu>
@@ -318,6 +336,24 @@ const Layout = (props) => {
                 Calendar
               </Link>
             </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <BarChartIcon />
+              </ListItemIcon>
+
+              <Link
+                style={{
+                  color: "black",
+                  textDecoration: "none",
+                  width: "100%",
+                  height: "100%",
+                  padding: "10px",
+                }}
+                to="/datastats"
+              >
+                Data Stats
+              </Link>
+            </ListItem>
 
             <Divider />
           </List>
@@ -329,7 +365,9 @@ const Layout = (props) => {
           })}
         >
           <div className={classes.drawerHeader} />
-          {props.children}
+          <Paper elevation={3} style={{ padding: "25px", minHeight: "1000px" }}>
+            {props.children}
+          </Paper>
         </main>
       </div>
     );

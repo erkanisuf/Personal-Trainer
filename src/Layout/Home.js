@@ -94,24 +94,39 @@ const Home = () => {
       }}
     >
       <Card className={classes.first}>
-        <CardContent>
-          <Typography
-            variant="h5"
-            component="h2"
-            color="textSecondary"
-            gutterBottom
-            style={{
-              color: "white",
-              fontFamily: "Ubuntu, sans-serif",
-              textShadow: "2px 4px 3px rgba(0,0,0,0.3)",
-            }}
-          >
-            Data Table
-            <div style={{ transform: "scale(3)", marginTop: "28px" }}>
-              <BarChartIcon />
-            </div>
-          </Typography>
-        </CardContent>
+        <Link
+          style={{
+            color: "black",
+            textDecoration: "none",
+            width: "100%",
+            height: "100%",
+            padding: "10px",
+            fontFamily: "Ubuntu, sans-serif",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          to="/datastats"
+        >
+          <CardContent>
+            <Typography
+              variant="h5"
+              component="h2"
+              color="textSecondary"
+              gutterBottom
+              style={{
+                color: "white",
+                fontFamily: "Ubuntu, sans-serif",
+                textShadow: "2px 4px 3px rgba(0,0,0,0.3)",
+              }}
+            >
+              Data Table
+              <div style={{ transform: "scale(3)", marginTop: "28px" }}>
+                <BarChartIcon />
+              </div>
+            </Typography>
+          </CardContent>
+        </Link>
       </Card>
       <Card className={classes.second}>
         <Link

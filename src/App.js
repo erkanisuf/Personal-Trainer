@@ -5,6 +5,7 @@ import Calendar from "./components/Calendar/Calendar";
 import { Switch, Route } from "react-router-dom";
 import Trainings from "./components/Trainings/Trainings";
 import Home from "./Layout/Home";
+import DataStats from "./components/DataStats/DataStats";
 
 function App() {
   return (
@@ -23,6 +24,9 @@ function App() {
             </Route>
             <Route path="/calendar">
               <Calendar />
+            </Route>
+            <Route path="/datastats">
+              <DataStats />
             </Route>
           </Switch>
         </div>
