@@ -14,8 +14,10 @@ import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 
 import PlaylistAddCheckIcon from "@material-ui/icons/PlaylistAddCheck";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { MyContext } from "../Context/Context";
+import MuiPhoneNumber from "material-ui-phone-number";
+import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 
 const useStyles = makeStyles((theme) => ({
   green: {
@@ -75,15 +77,7 @@ export default function FormDialog({ source }) {
 
   const handleClose = () => {
     setOpen(false);
-    setErrorBool({
-      firstname: true,
-      lastname: true,
-      city: true,
-      email: true,
-      phone: true,
-      streetaddress: true,
-      postcode: true,
-    });
+
     setForm({
       firstname: "",
       lastname: "",
@@ -97,96 +91,40 @@ export default function FormDialog({ source }) {
 
   const handleForm = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    console.log(form[e.target.name].length);
-    if (
-      form[e.target.name].length >= 3 &&
-      form[e.target.name].length < 20 &&
-      e.target.value !== ""
-    ) {
-      setErrorBool({ ...errorBool, [e.target.name]: false });
-    } else {
-      setErrorBool({ ...errorBool, [e.target.name]: true });
-    }
+    console.log(form.email);
   };
-  const [errorBool, setErrorBool] = useState({
-    firstname: true,
-    lastname: true,
-    email: true,
-    phone: true,
-    streetaddress: true,
-    postcode: true,
-    city: true,
-  });
-  useEffect(() => {
-    const formErrorsCHeck = () => {
-      if (form.firstname.length >= 3 && form.firstname.length < 20) {
-        setErrorBool({
-          ...errorBool,
-          firstname: false,
-        });
-      }
-      if (form.lastname.length >= 3 && form.lastname.length < 20) {
-        setErrorBool({
-          ...errorBool,
-
-          lastname: false,
-        });
-      }
-      if (form.email.length >= 3 && form.email.length < 20) {
-        setErrorBool({
-          ...errorBool,
-
-          email: false,
-        });
-      }
-      if (form.phone.length >= 3 && form.phone.length < 20) {
-        setErrorBool({
-          ...errorBool,
-
-          phone: false,
-        });
-      }
-      if (form.city.length >= 3 && form.city.length < 20) {
-        setErrorBool({
-          ...errorBool,
-
-          city: false,
-        });
-      }
-      if (form.streetaddress.length >= 3 && form.streetaddress.length < 20) {
-        setErrorBool({
-          ...errorBool,
-
-          streetaddress: false,
-        });
-      }
-
-      if (form.postcode.length >= 3 && form.postcode.length < 20) {
-        setErrorBool({
-          ...errorBool,
-          postcode: false,
-        });
-      }
-    };
-    formErrorsCHeck();
-  }, [form]);
+  const handlePhone = (e) => {
+    setForm({ ...form, phone: e });
+    console.log(form.phone.length);
+  };
+  const handleAdress = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const fetchAddNewCustomer = () => {
+    let re = new RegExp(
+      /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i
+    );
+
     if (
-      errorBool.firstname ||
-      errorBool.lastname ||
-      errorBool.email ||
-      errorBool.phone ||
-      errorBool.streetaddress ||
-      errorBool.postcode ||
-      errorBool.city
+      form.firstname.length > 3 &&
+      form.firstname.length < 20 &&
+      form.firstname.value !== "" &&
+      form.lastname.length > 3 &&
+      form.lastname.length < 20 &&
+      form.lastname.value !== "" &&
+      form.phone.length === 17 &&
+      form.phone.value !== "" &&
+      re.test(form.email) &&
+      form.email.value !== ""
     ) {
-      console.log("error");
-    } else {
-      console.log("can send");
       sendAfterForm();
+      console.log("letz GO");
+    } else {
+      alert("Please Fill the Required Form Fields correctly!");
     }
   };
+
   const sendAfterForm = () => {
     console.log("NOW SENDS MAN");
     fetch(`https://customerrest.herokuapp.com/api/customers`, {
@@ -199,23 +137,13 @@ export default function FormDialog({ source }) {
       .then((key) => console.log("key", key))
       .then((key) => {
         console.log("Succ", key);
-        setErrorBool({
-          firstname: true,
-          lastname: true,
-          city: true,
-          email: true,
-          phone: true,
-          streetaddress: true,
-          postcode: true,
-        });
+
         setForm({
           firstname: "",
           lastname: "",
-          city: "",
+
           email: "",
           phone: "",
-          streetaddress: "",
-          postcode: "",
         });
         valueThree();
         setOpen(false);
@@ -265,97 +193,123 @@ export default function FormDialog({ source }) {
           <DialogContentText>
             Please fill all fields in order to add a new Member.
           </DialogContentText>
-          <TextField
-            onChange={handleForm}
-            autoFocus
-            margin="dense"
-            id="firstname"
-            name="firstname"
-            label="First Name"
-            type="text"
-            error={errorBool.firstname}
-            helperText={errorBool.firstname ? "Required 4-20chars" : "Required"}
-            fullWidth
-          />
-          <TextField
-            onChange={handleForm}
-            margin="dense"
-            id="lastname"
-            name="lastname"
-            label="Last Name"
-            type="text"
-            error={errorBool.lastname}
-            helperText={errorBool.lastname ? "Required 4-20chars" : "Required"}
-            fullWidth
-          />
-          <TextField
-            onChange={handleForm}
-            margin="dense"
-            id="email"
-            name="email"
-            label="Email Address"
-            type="email"
-            error={errorBool.email}
-            helperText={errorBool.email ? "Required 4-20chars" : "Required"}
-            fullWidth
-          />
-          <div
-            className={classes.root}
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
+          <ValidatorForm
+            onSubmit={fetchAddNewCustomer}
+            onError={(errors) => console.log(errors)}
           >
             <TextField
               onChange={handleForm}
+              autoFocus
               margin="dense"
-              id="phone"
-              name="phone"
-              label="Phone"
-              type="phone"
-              error={errorBool.phone}
-              helperText={errorBool.phone ? "Required 4-20chars" : "Required"}
-              fullWidth
-            />
-            <TextField
-              onChange={handleForm}
-              margin="dense"
-              id="city"
-              name="city"
-              label="City"
+              id="firstname"
+              name="firstname"
+              label="First Name"
               type="text"
-              error={errorBool.city}
-              helperText={errorBool.city ? "Required 4-20chars" : "Required"}
-              fullWidth
-            />
-            <TextField
-              onChange={handleForm}
-              margin="dense"
-              id="streetaddress"
-              name="streetaddress"
-              label="Street"
-              type="text"
-              error={errorBool.streetaddress}
+              error={
+                form.firstname.length > 3 &&
+                form.firstname.length < 20 &&
+                form.firstname.value !== ""
+                  ? false
+                  : true
+              }
               helperText={
-                errorBool.streetaddress ? "Required 4-20chars" : "Required"
+                form.firstname.length > 3 &&
+                form.firstname.length < 20 &&
+                form.firstname.value !== ""
+                  ? "Required 4-20chars"
+                  : "Required"
               }
               fullWidth
             />
             <TextField
               onChange={handleForm}
               margin="dense"
-              id="postcode"
-              name="postcode"
-              label="PostCode"
+              id="lastname"
+              name="lastname"
+              label="Last Name"
               type="text"
-              error={errorBool.postcode}
+              error={
+                form.lastname.length > 3 &&
+                form.lastname.length < 20 &&
+                form.lastname.value !== ""
+                  ? false
+                  : true
+              }
               helperText={
-                errorBool.postcode ? "Required 4-20chars" : "Required"
+                form.lastname.length > 3 &&
+                form.lastname.length < 20 &&
+                form.lastname.value !== ""
+                  ? "Required 4-20chars"
+                  : "Required"
               }
               fullWidth
             />
-          </div>
+
+            <TextValidator
+              label="Email"
+              onChange={handleForm}
+              name="email"
+              fullWidth
+              margin="dense"
+              value={form.email}
+              validators={["required", "isEmail"]}
+              errorMessages={["this field is required", "email is not valid"]}
+            />
+            <div
+              className={classes.root}
+              style={{
+                display: "flex",
+                flexDirection: window.innerWidth <= 480 ? "column" : "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <MuiPhoneNumber
+                fullWidth
+                label="Phone"
+                margin="dense"
+                defaultCountry={"fi"}
+                value={form.phone}
+                onChange={handlePhone}
+                error={
+                  form.phone.length < 17 && form.phone.value !== ""
+                    ? true
+                    : false
+                }
+                helperText={
+                  form.phone.length < 17 && form.phone.value !== ""
+                    ? "Invalid Number"
+                    : "Required"
+                }
+              />
+              <TextField
+                onChange={handleAdress}
+                margin="dense"
+                id="city"
+                name="city"
+                label="City"
+                type="text"
+                fullWidth
+              />
+              <TextField
+                onChange={handleAdress}
+                margin="dense"
+                id="streetaddress"
+                name="streetaddress"
+                label="Street"
+                type="text"
+                fullWidth
+              />
+              <TextField
+                onChange={handleAdress}
+                margin="dense"
+                id="postcode"
+                name="postcode"
+                label="PostCode"
+                type="text"
+                fullWidth
+              />
+            </div>
+          </ValidatorForm>
         </DialogContent>
         <DialogActions>
           <Button variant="outlined" onClick={handleClose}>

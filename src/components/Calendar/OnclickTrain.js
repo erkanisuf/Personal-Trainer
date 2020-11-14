@@ -92,7 +92,12 @@ const OnclickTrain = ({ handleCloseOnclick, openOnclick, opneningObj }) => {
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Training information</DialogTitle>
-        <DialogContent style={{ width: "100%", height: "100%" }}>
+        <DialogContent
+          style={{
+            width: window.innerWidth <= 480 ? "95%" : "100%",
+            height: "100%",
+          }}
+        >
           {user && (
             <div>
               {" "}

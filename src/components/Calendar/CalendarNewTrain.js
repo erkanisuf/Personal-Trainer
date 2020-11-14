@@ -144,7 +144,11 @@ export default function CalendarNewTrain({
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Add new Training</DialogTitle>
-        <DialogContent style={{ width: "100%" }}>
+        <DialogContent
+          style={{
+            width: window.innerWidth <= 480 ? "90%" : "100%",
+          }}
+        >
           <DialogContentText>
             Please emake sure to fill all the required information!
           </DialogContentText>
@@ -163,10 +167,11 @@ export default function CalendarNewTrain({
               <div
                 style={{
                   display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-evenly",
+                  flexDirection: window.innerWidth <= 480 ? "column" : "row",
+                  justifyContent:
+                    window.innerWidth <= 480 ? "center" : "space-evenly",
                   alignItems: "center",
-                  border: "1px solid grey",
+                  border: window.innerWidth <= 480 ? "none" : "1px solid grey",
                   borderRadius: "10px",
                   padding: "10px",
 

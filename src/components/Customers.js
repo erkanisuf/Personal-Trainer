@@ -2,7 +2,6 @@ import React, { useContext, useState, useRef } from "react";
 import { MyContext } from "../Context/Context";
 import { AgGridReact } from "ag-grid-react";
 
-import "ag-grid-enterprise";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import TextField from "@material-ui/core/TextField";
@@ -50,16 +49,27 @@ const Customers = () => {
       sortable: false,
 
       resizable: true,
-      width: 200,
+      width: 150,
     },
     {
       headerName: "Customers",
       resizable: true,
+
       children: [
         {
           headerName: "FirstName",
           field: "firstname",
-          width: 200,
+          width: 100,
+          sortable: true,
+
+          filter: "agTextColumnFilter",
+
+          resizable: true,
+        },
+        {
+          headerName: "LastName",
+          field: "lastname",
+          width: 150,
           sortable: true,
 
           filter: "agTextColumnFilter",
@@ -158,6 +168,7 @@ const Customers = () => {
 
   return (
     <div className="ag-theme-alpine" style={{ height: 600 }}>
+      <h1>Customers</h1>
       <div
         style={{
           width: "95%",

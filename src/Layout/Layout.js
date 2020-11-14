@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
-import CssBaseline from "@material-ui/core/CssBaseline";
+import HomeIcon from "@material-ui/icons/Home";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
@@ -15,10 +15,15 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
 
+import EmojiPeopleIcon from "@material-ui/icons/EmojiPeople";
+import FitnessCenterIcon from "@material-ui/icons/FitnessCenter";
+
+import EventIcon from "@material-ui/icons/Event";
+import "../App.css";
+
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -26,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
   },
   appBar: {
+    backgroundColor: "#558b2f",
     transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -56,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
+
     ...theme.mixins.toolbar,
     justifyContent: "flex-end",
   },
@@ -81,97 +87,252 @@ const useStyles = makeStyles((theme) => ({
 const Layout = (props) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = useState(false);
-  return (
-    <div className={classes.root}>
-      <AppBar
-        position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
-        })}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={() => setOpen(true)}
-            edge="start"
-            className={clsx(classes.menuButton, open && classes.hide)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            Persistent drawer
-          </Typography>
-        </Toolbar>
-      </AppBar>
+  const [open, setOpen] = useState(true);
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
-      <Drawer
-        variant="persistent"
-        anchor="left"
-        open={open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-        className={classes.drawer}
-      >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={() => setOpen(false)}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          <ListItem button>
-            <ListItemIcon>
-              <MailIcon />
-            </ListItemIcon>
-            <ListItemText primary={<Link to="/customers">Customers</Link>} />
-          </ListItem>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <Divider />
-          <li>
-            <Link to="/customers">Customers</Link>
-          </li>
-          <Divider />
-          <li>
-            <Link to="/trainings">Trainings</Link>
-          </li>
-          <Divider />
-          <li>
-            <Link to="/calendar">Calendar</Link>
-          </li>
-          <Divider />
-        </List>
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
-      <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: open,
-        })}
-      >
-        <div className={classes.drawerHeader} />
+  if (window.innerWidth <= 480) {
+    return (
+      <div>
+        <AppBar position="static" style={{ backgroundColor: "#558b2f" }}>
+          <Toolbar>
+            <IconButton
+              style={{ color: "white", transform: "scale(1.5)" }}
+              aria-controls="simple-menu"
+              aria-haspopup="true"
+              onClick={handleClick}
+            >
+              <MenuIcon />
+            </IconButton>
+
+            <Menu
+              id="simple-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleClose}>
+                {" "}
+                <Link
+                  style={{
+                    color: "black",
+                    textDecoration: "none",
+                    width: "100%",
+                    height: "100%",
+                    padding: "10px",
+                  }}
+                  to="/"
+                >
+                  <HomeIcon /> Home
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                {" "}
+                <Link
+                  style={{
+                    color: "black",
+                    textDecoration: "none",
+                    width: "100%",
+                    height: "100%",
+                    padding: "10px",
+                  }}
+                  to="/customers"
+                >
+                  <EmojiPeopleIcon /> Customers
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                {" "}
+                <Link
+                  style={{
+                    color: "black",
+                    textDecoration: "none",
+                    width: "100%",
+                    height: "100%",
+                    padding: "10px",
+                  }}
+                  to="/trainings"
+                >
+                  <FitnessCenterIcon /> Trainings
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                {" "}
+                <Link
+                  style={{
+                    color: "black",
+                    textDecoration: "none",
+                    width: "100%",
+                    height: "100%",
+                    padding: "10px",
+                  }}
+                  to="/calendar"
+                >
+                  <EventIcon /> Calendar
+                </Link>
+              </MenuItem>
+            </Menu>
+            <Typography
+              className="TrainerLogo"
+              style={{ fontFamily: "Bangers", fontSize: "25px" }}
+              variant="h6"
+              noWrap
+            >
+              <FitnessCenterIcon /> Personal Trainer
+              <FitnessCenterIcon />
+            </Typography>
+          </Toolbar>
+        </AppBar>
         {props.children}
-      </main>
-    </div>
-  );
+      </div>
+    );
+  } else
+    return (
+      <div className={classes.root}>
+        <AppBar
+          position="fixed"
+          className={clsx(classes.appBar, {
+            [classes.appBarShift]: open,
+          })}
+        >
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={() => setOpen(true)}
+              edge="start"
+              className={clsx(classes.menuButton, open && classes.hide)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              className="TrainerLogo"
+              style={{ fontFamily: "Bangers", fontSize: "40px" }}
+              variant="h6"
+              noWrap
+            >
+              <FitnessCenterIcon /> Personal Trainer
+              <FitnessCenterIcon />
+            </Typography>
+          </Toolbar>
+        </AppBar>
+
+        <Drawer
+          variant="persistent"
+          anchor="left"
+          open={open}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          className={classes.drawer}
+        >
+          <div className={classes.drawerHeader}>
+            <IconButton onClick={() => setOpen(false)}>
+              {theme.direction === "ltr" ? (
+                <ChevronLeftIcon />
+              ) : (
+                <ChevronRightIcon />
+              )}
+            </IconButton>
+          </div>
+          <Divider />
+          <List>
+            <ListItem button>
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+
+              <Link
+                style={{
+                  color: "black",
+                  textDecoration: "none",
+
+                  width: "100%",
+                  height: "100%",
+                  padding: "10px",
+                }}
+                to="/"
+              >
+                Home
+              </Link>
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <EmojiPeopleIcon />
+              </ListItemIcon>
+
+              <Link
+                style={{
+                  color: "black",
+                  textDecoration: "none",
+                  width: "100%",
+                  height: "100%",
+                  padding: "10px",
+                }}
+                to="/customers"
+              >
+                Customers
+              </Link>
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <FitnessCenterIcon />
+              </ListItemIcon>
+
+              <Link
+                style={{
+                  color: "black",
+                  textDecoration: "none",
+                  width: "100%",
+                  height: "100%",
+                  padding: "10px",
+                }}
+                to="/trainings"
+              >
+                Trainings
+              </Link>
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <EventIcon />
+              </ListItemIcon>
+
+              <Link
+                style={{
+                  color: "black",
+                  textDecoration: "none",
+                  width: "100%",
+                  height: "100%",
+                  padding: "10px",
+                }}
+                to="/calendar"
+              >
+                Calendar
+              </Link>
+            </ListItem>
+
+            <Divider />
+          </List>
+        </Drawer>
+
+        <main
+          className={clsx(classes.content, {
+            [classes.contentShift]: open,
+          })}
+        >
+          <div className={classes.drawerHeader} />
+          {props.children}
+        </main>
+      </div>
+    );
 };
 
 export default Layout;

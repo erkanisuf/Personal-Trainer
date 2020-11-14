@@ -21,12 +21,6 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: "#f44336",
     },
-    "@media (max-width:1024px)": {
-      margin: theme.spacing(0),
-      width: "5px",
-      fontSize: "0px",
-      padding: "-50px",
-    },
   },
   green: {
     margin: theme.spacing(1),
@@ -36,12 +30,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#3b6120",
     "&:hover": {
       backgroundColor: "#4caf50",
-    },
-    "@media (max-width:1024px)": {
-      margin: theme.spacing(0),
-      width: "5px",
-      fontSize: "0px",
-      padding: "-50px",
     },
   },
 
@@ -53,12 +41,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#6e6d19",
     "&:hover": {
       backgroundColor: "#ffc107",
-    },
-    "@media (max-width:1024px)": {
-      margin: theme.spacing(0),
-      width: "5px",
-      fontSize: "0px",
-      padding: "-50px",
     },
   },
   update: {
@@ -137,6 +119,7 @@ const ActionsRenderer = (props) => {
       .then((key) => console.log("key", key))
       .then((key) => {
         // reFetch();
+        valueThree();
         setbuttonClicked(false);
         setReFire(2);
         // window.location.reload(); // Cant figure OUT THIS THING its so buggy thats why reload -_-
@@ -253,84 +236,159 @@ const ActionsRenderer = (props) => {
     stopEditing(false);
   };
 
-  return (
-    <div style={{ width: "50%" }}>
-      <Button
-        startIcon={<DeleteIcon />}
-        className={classes.margin}
-        variant="contained"
-        color="secondary"
-        onClick={handleOpenDialog}
-      >
-        Delete
-      </Button>
-      {editing ? (
-        <span
-          style={{
-            borderRight: "1px solid grey",
-            borderLeft: "1px solid grey",
-            padding: "2px",
-          }}
+  if (window.innerWidth <= 480) {
+    return (
+      <div style={{ width: "100%" }}>
+        <IconButton
+          variant="contained"
+          color="secondary"
+          style={{ width: "5px" }}
+          onClick={handleOpenDialog}
         >
-          <IconButton
-            aria-label="save"
-            className={classes.update}
-            onClick={handleUpdateItem}
-            disabled={disabled}
+          <DeleteIcon />
+        </IconButton>
+        {editing ? (
+          <span
+            style={{
+              borderRight: "1px solid grey",
+              borderLeft: "1px solid grey",
+              padding: "2px",
+            }}
           >
-            <SaveIcon />
-            <span style={{ fontSize: "10px", color: "grey" }}>Save</span>
-          </IconButton>
+            <IconButton
+              aria-label="save"
+              className={classes.update}
+              onClick={handleUpdateItem}
+              disabled={disabled}
+            >
+              <SaveIcon />
+            </IconButton>
 
-          <IconButton
-            aria-label="delete"
-            className={classes.cancel}
-            onClick={() => stopEditing(true)}
-            disabled={disabled}
+            <IconButton
+              aria-label="delete"
+              className={classes.cancel}
+              onClick={() => stopEditing(true)}
+              disabled={disabled}
+            >
+              <CancelIcon />
+            </IconButton>
+          </span>
+        ) : (
+          <>
+            <IconButton
+              style={{ color: "orange" }}
+              variant="contained"
+              color="secondary"
+              onClick={startEditing}
+              disabled={disabled}
+            >
+              <EditIcon />
+            </IconButton>
+          </>
+        )}
+
+        <IconButton
+          style={{ color: "green", width: "5px" }}
+          variant="contained"
+          color="primary"
+          onClick={handleClick}
+        >
+          <FitnessCenterIcon />
+        </IconButton>
+
+        <ModalCustomers
+          open={open}
+          handleClose={handleClose}
+          training={training}
+          user={selfCustomer}
+        />
+        <Confirm
+          openDialog={openDialog}
+          handleCloseDialog={handleCloseDialog}
+          handleDeleteItem={handleDeleteItem}
+          user={selfCustomer}
+        />
+      </div>
+    );
+  } else
+    return (
+      <div style={{ width: "50%" }}>
+        <Button
+          startIcon={<DeleteIcon />}
+          className={classes.margin}
+          variant="contained"
+          color="secondary"
+          onClick={handleOpenDialog}
+        >
+          Delete
+        </Button>
+        {editing ? (
+          <span
+            style={{
+              borderRight: "1px solid grey",
+              borderLeft: "1px solid grey",
+              padding: "2px",
+            }}
           >
-            <CancelIcon />
-            <span style={{ fontSize: "10px", color: "grey" }}>Cancel</span>
-          </IconButton>
-        </span>
-      ) : (
-        <>
-          <Button
-            startIcon={<EditIcon />}
-            className={classes.yellow}
-            variant="contained"
-            color="secondary"
-            onClick={startEditing}
-            disabled={disabled}
-          >
-            Edit
-          </Button>
-        </>
-      )}
+            <IconButton
+              aria-label="save"
+              className={classes.update}
+              onClick={handleUpdateItem}
+              disabled={disabled}
+            >
+              <SaveIcon />
+              <span style={{ fontSize: "10px", color: "grey" }}>Save</span>
+            </IconButton>
 
-      <Button
-        startIcon={<FitnessCenterIcon />}
-        className={classes.green}
-        variant="contained"
-        color="primary"
-        onClick={handleClick}
-      >
-        Trainings
-      </Button>
+            <IconButton
+              aria-label="delete"
+              className={classes.cancel}
+              onClick={() => stopEditing(true)}
+              disabled={disabled}
+            >
+              <CancelIcon />
+              <span style={{ fontSize: "10px", color: "grey" }}>Cancel</span>
+            </IconButton>
+          </span>
+        ) : (
+          <>
+            <Button
+              startIcon={<EditIcon />}
+              className={classes.yellow}
+              variant="contained"
+              color="secondary"
+              onClick={startEditing}
+              disabled={disabled}
+            >
+              Edit
+            </Button>
+          </>
+        )}
 
-      <ModalCustomers
-        open={open}
-        handleClose={handleClose}
-        training={training}
-        user={selfCustomer}
-      />
-      <Confirm
-        openDialog={openDialog}
-        handleCloseDialog={handleCloseDialog}
-        handleDeleteItem={handleDeleteItem}
-        user={selfCustomer}
-      />
-    </div>
-  );
+        <Button
+          startIcon={<FitnessCenterIcon />}
+          className={classes.green}
+          variant="contained"
+          color="primary"
+          onClick={handleClick}
+        >
+          Trainings
+        </Button>
+
+        <ModalCustomers
+          open={open}
+          handleClose={handleClose}
+          training={training}
+          user={selfCustomer}
+        />
+        <Confirm
+          openDialog={openDialog}
+          handleCloseDialog={handleCloseDialog}
+          handleDeleteItem={handleDeleteItem}
+          user={selfCustomer}
+        />
+      </div>
+    );
 };
 
 export default ActionsRenderer;

@@ -133,7 +133,14 @@ const CalendarJS = () => {
 
   /////
   return (
-    <div style={{ width: "100%", display: "flex", flexDirection: "column" }}>
+    <div
+      style={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <h1>Calendar</h1>
       <OnclickTrain
         handleCloseOnclick={handleCloseOnclick}
         openOnclick={openOnclick}
@@ -143,6 +150,7 @@ const CalendarJS = () => {
         onClick={() => setOpen(true)}
         color="primary"
         variant="outlined"
+        style={{ margin: window.innerWidth <= 480 ? "10px auto" : "" }}
         className={classes.fitnessicon}
         startIcon={<FitnessCenterIcon />}
       >
@@ -173,7 +181,6 @@ const CalendarJS = () => {
           selectable={true}
         />
       )}
-      <h1>Calendar</h1>
     </div>
   );
 };

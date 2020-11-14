@@ -85,7 +85,7 @@ const AddTraining = ({ customer }) => {
     <div
       style={{
         display: "flex",
-        flexDirection: "row",
+        flexDirection: window.innerWidth <= 480 ? "column" : "row",
         justifyContent: "space-between",
         border: "1px solid grey",
         borderRadius: "10px",
@@ -95,7 +95,7 @@ const AddTraining = ({ customer }) => {
       }}
     >
       <TextField
-        style={{ width: "300px" }}
+        style={{ width: window.innerWidth <= 480 ? "100%" : "300px" }}
         label="Activity"
         name="activity"
         margin="normal"

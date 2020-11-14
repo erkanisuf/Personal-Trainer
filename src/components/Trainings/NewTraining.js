@@ -162,7 +162,7 @@ export default function NewTraining({ open, handleOpen }) {
   return (
     <div
       style={{
-        height: "30%",
+        height: open ? (window.innerWidth <= 480 ? "100%" : "30%") : "0",
         width: "100%",
         display: "flex",
         flexDirection: "row",
@@ -174,7 +174,7 @@ export default function NewTraining({ open, handleOpen }) {
         <div
           style={{
             display: "flex",
-            flexDirection: "row",
+            flexDirection: window.innerWidth <= 480 ? "column" : "row",
             justifyContent: "space-evenly",
             alignItems: "center",
             border: "1px solid grey",

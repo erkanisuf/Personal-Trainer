@@ -16,15 +16,15 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   fitnessicon: {
     margin: theme.spacing(1),
-    marginLeft: "400px",
+    marginLeft: window.innerWidth <= 480 ? "15px" : "400px",
     width: "160px",
     fontSize: "14px",
     padding: "5px",
     height: "40px",
     float: "right",
-    alignSelf: "flex-end",
-    justifySelf: "flex-end",
-
+    alignSelf: window.innerWidth <= 480 ? "center" : "flex-end",
+    justifySelf: window.innerWidth <= 480 ? "center" : "flex-end",
+    order: window.innerWidth <= 480 ? "1" : "",
     color: "white",
     backgroundColor: "#3b6120",
     "&:hover": {
@@ -33,12 +33,12 @@ const useStyles = makeStyles((theme) => ({
   },
   cancel: {
     margin: theme.spacing(1),
-    marginLeft: "400px",
+    marginLeft: window.innerWidth <= 480 ? "15px" : "400px",
     width: "1%",
     fontSize: "25px",
     padding: "1px",
     height: "60px",
-
+    order: window.innerWidth <= 480 ? "1" : "",
     borderRadius: "50%",
     alignSelf: "center",
     color: "grey",
@@ -213,12 +213,15 @@ const Trainings = () => {
             margin: "0 auto",
           }}
         >
+          <h1>Trainings</h1>
           <NewTraining open={open} handleOpen={handleOpen} />
           <div
             style={{
               display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-evenly",
+              flexDirection: window.innerWidth <= 480 ? "column" : "row",
+              justifyContent:
+                window.innerWidth <= 480 ? "center" : "space-evenly",
+              alignItems: "center",
 
               margin: "0 auto",
 
@@ -232,6 +235,7 @@ const Trainings = () => {
               aria-label="Delete selected"
               onClick={deleteSelected}
               style={{
+                order: window.innerWidth <= 480 ? "2" : "",
                 marginTop: "20px ",
                 marginLeft: "15px",
                 marginRight: "5px",
@@ -244,7 +248,10 @@ const Trainings = () => {
             </Button>
 
             <TextField
-              style={{ width: "300px" }}
+              style={{
+                width: "300px",
+                order: window.innerWidth <= 480 ? "3" : "",
+              }}
               label="Filter Activity"
               margin="normal"
               variant="outlined"
@@ -254,7 +261,13 @@ const Trainings = () => {
               size="small"
             />
             {errorFilter && (
-              <span style={{ color: "red", marginTop: "25px" }}>
+              <span
+                style={{
+                  color: "red",
+                  marginTop: "25px",
+                  order: window.innerWidth <= 480 ? "4" : "",
+                }}
+              >
                 Not found items with keyword:{" "}
                 <b>
                   <u>{value}</u>

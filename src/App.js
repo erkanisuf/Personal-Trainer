@@ -4,16 +4,17 @@ import Customers from "./components/Customers";
 import Calendar from "./components/Calendar/Calendar";
 import { Switch, Route } from "react-router-dom";
 import Trainings from "./components/Trainings/Trainings";
+import Home from "./Layout/Home";
 
 function App() {
   return (
     <Layout>
       <div className="App">
-        <h1>Trainer</h1>
-
-        <div>
+        <div style={{ marginTop: "50px" }}>
           <Switch>
-            <Route exact path="/"></Route>
+            <Route exact path="/">
+              <Home />
+            </Route>
             <Route path="/customers">
               <Customers />
             </Route>

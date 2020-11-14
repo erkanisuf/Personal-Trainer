@@ -24,7 +24,7 @@ import Confirm from "./Confirm";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    overflow: "hidden",
+    overflow: window.innerWidth <= 1024 ? "scroll" : "hidden",
     padding: "1px",
     width: "100%",
     height: "700px",
@@ -37,13 +37,14 @@ const useStyles = makeStyles((theme) => ({
     outline: "none",
   },
   paper: {
-    width: "100%",
+    width: window.innerWidth <= 480 ? "90%" : "100%",
+
     maxWidth: 1000,
     height: "1000px",
     maxHeight: "100%",
     overflow: "scroll",
     margin: `${theme.spacing(5)}px auto`,
-    padding: theme.spacing(10),
+    padding: window.innerWidth <= 480 ? theme.spacing(1) : theme.spacing(10),
   },
   delete: {
     color: "#f44336",
@@ -99,6 +100,7 @@ const ModalCustomers = ({ open, handleClose, training, user }) => {
 
             display: "flex",
             justifyContent: "flex-end",
+            marginBottom: window.innerWidth <= 480 ? "25px" : "",
           }}
         >
           <Button
@@ -107,7 +109,7 @@ const ModalCustomers = ({ open, handleClose, training, user }) => {
             startIcon={<CloseIcon />}
             onClick={handleClose}
           >
-            Close
+            {window.innerWidth <= 480 ? "" : "Close"}
           </Button>
         </div>
         <Grid container wrap="wrap">
@@ -138,6 +140,7 @@ const ModalCustomers = ({ open, handleClose, training, user }) => {
           <TableContainer
             component={Paper}
             style={{
+              overflow: "scroll",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -160,7 +163,12 @@ const ModalCustomers = ({ open, handleClose, training, user }) => {
                 {training.map((key, index) =>
                   key.activity ? (
                     <TableRow key={index}>
-                      <TableCell style={{ width: "100px" }}>
+                      <TableCell
+                        style={{
+                          width: window.innerWidth <= 480 ? "400px" : "100px",
+                          paddingLeft: window.innerWidth <= 480 && "200px",
+                        }}
+                      >
                         <IconButton
                           aria-label="delete"
                           className={classes.delete}
@@ -184,7 +192,9 @@ const ModalCustomers = ({ open, handleClose, training, user }) => {
                     </TableRow>
                   ) : (
                     <TableRow key={index}>
-                      <TableCell>No Activities yet!</TableCell>
+                      <TableCell colSpan={5} align="center">
+                        No Activities yet!
+                      </TableCell>
                     </TableRow>
                   )
                 )}
@@ -196,7 +206,7 @@ const ModalCustomers = ({ open, handleClose, training, user }) => {
               width: "100%",
               margin: "15px",
               display: "flex",
-              justifyContent: "flex-end",
+              justifyContent: window.innerWidth <= 480 ? "center" : "flex-end",
             }}
           >
             <Button
