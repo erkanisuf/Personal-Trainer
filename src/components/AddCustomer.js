@@ -91,11 +91,9 @@ export default function FormDialog({ source }) {
 
   const handleForm = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    console.log(form.email);
   };
   const handlePhone = (e) => {
     setForm({ ...form, phone: e });
-    console.log(form.phone.length);
   };
   const handleAdress = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -119,14 +117,12 @@ export default function FormDialog({ source }) {
       form.email.value !== ""
     ) {
       sendAfterForm();
-      console.log("letz GO");
     } else {
       alert("Please Fill the Required Form Fields correctly!");
     }
   };
 
   const sendAfterForm = () => {
-    console.log("NOW SENDS MAN");
     fetch(`https://customerrest.herokuapp.com/api/customers`, {
       method: "POST",
       headers: {
@@ -134,10 +130,8 @@ export default function FormDialog({ source }) {
       },
       body: JSON.stringify(form),
     })
-      .then((key) => console.log("key", key))
+      .then((key) => console.log("Processing"))
       .then((key) => {
-        console.log("Succ", key);
-
         setForm({
           firstname: "",
           lastname: "",

@@ -1,4 +1,3 @@
-/* eslint-disable no-use-before-define */
 import React, { useState, useContext, useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
@@ -30,10 +29,12 @@ const useStyles = makeStyles((theme) => ({
   },
   margins: {
     margin: theme.spacing(1),
+    width: window.innerWidth <= 480 ? "100%" : "",
   },
   calendar: {
     margin: "5px",
     marginTop: "20px",
+    width: window.innerWidth <= 480 ? "100%" : "",
   },
 
   fitnessicon: {
@@ -81,7 +82,7 @@ export default function CalendarNewTrain({
   select,
 }) {
   const { valueOne } = useContext(MyContext);
-  console.log(startvalue);
+
   const [customers] = valueOne;
 
   const classes = useStyles();
@@ -108,7 +109,6 @@ export default function CalendarNewTrain({
     if (actError || numError || select === null) {
       alert("Please check the fields!");
     } else {
-      console.log("NOW SENDS MAN");
       fetch(`https://customerrest.herokuapp.com/api/trainings`, {
         method: "POST",
         headers: {
@@ -116,9 +116,8 @@ export default function CalendarNewTrain({
         },
         body: JSON.stringify(startvalue),
       })
-        .then((key) => console.log("key", key))
+        .then((key) => console.log("Processing"))
         .then((key) => {
-          console.log("Succ", key);
           setOpensnack(true);
           valueThree();
 

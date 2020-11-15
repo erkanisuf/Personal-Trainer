@@ -24,7 +24,7 @@ const ByUser = () => {
   const [customers] = valueOne;
   const [workArray, setWorkArray] = useState(null);
   const [select, setSelect] = useState(null);
-  console.log(workArray);
+
   const fetchTrainingData = (param) => {
     fetch(`${param}`, {
       credentials: "same-origin",
@@ -45,7 +45,6 @@ const ByUser = () => {
   };
 
   const reNewStates = (prop, event) => {
-    console.log(prop, "prop");
     if (prop !== null) {
       fetchTrainingData(prop.links[2].href);
     } else {
@@ -77,7 +76,7 @@ const ByUser = () => {
           duration: _.sumBy(objs, "duration"),
         }))
         .value();
-      console.log(byTrain);
+
       setData(byTrain);
 
       const copyArr = [...workArray.content];
@@ -98,7 +97,6 @@ const ByUser = () => {
         .value();
       setDataDate(againGroup);
     } else {
-      console.log("No Data");
       setDataDate(null);
       setData(null);
     }

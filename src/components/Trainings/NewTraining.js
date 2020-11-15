@@ -1,4 +1,3 @@
-/* eslint-disable no-use-before-define */
 import React, { useState, useContext, useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
@@ -24,10 +23,12 @@ const useStyles = makeStyles((theme) => ({
   },
   margins: {
     margin: theme.spacing(1),
+    width: window.innerWidth <= 480 ? "80%" : "",
   },
   calendar: {
     margin: "5px",
     marginTop: "20px",
+    width: window.innerWidth <= 480 ? "80%" : "",
   },
 
   fitnessicon: {
@@ -108,7 +109,6 @@ export default function NewTraining({ open, handleOpen }) {
     if (actError || numError || select === null) {
       alert("Please check the fields!");
     } else {
-      console.log("NOW SENDS MAN");
       fetch(`https://customerrest.herokuapp.com/api/trainings`, {
         method: "POST",
         headers: {
@@ -116,9 +116,8 @@ export default function NewTraining({ open, handleOpen }) {
         },
         body: JSON.stringify(trainingSend),
       })
-        .then((key) => console.log("key", key))
+        .then((key) => console.log("Processing"))
         .then((key) => {
-          console.log("Succ", key);
           valueThree();
           setTrainignSend({
             ...trainingSend,
@@ -146,7 +145,6 @@ export default function NewTraining({ open, handleOpen }) {
   const reNewStates = (event) => {
     setSelect(event);
     if (event === null) {
-      console.log("its nul man");
     } else {
       setTrainignSend({ ...trainingSend, customer: event.links[1].href });
     }

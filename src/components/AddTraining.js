@@ -59,7 +59,6 @@ const AddTraining = ({ customer }) => {
     if (actError || numError) {
       alert("Please check the fields!");
     } else {
-      console.log("NOW SENDS MAN");
       fetch(`https://customerrest.herokuapp.com/api/trainings`, {
         method: "POST",
         headers: {
@@ -67,9 +66,14 @@ const AddTraining = ({ customer }) => {
         },
         body: JSON.stringify(trainingSend),
       })
-        .then((key) => console.log("key", key))
+        .then((key) => console.log("Processing"))
         .then((key) => {
-          console.log("Succ", key);
+          setTrainignSend({
+            date: new Date(),
+            duration: 15,
+            activity: "",
+            customer: customer.links[1].href,
+          });
           valueThree();
         })
         .catch((err) => console.error(err));

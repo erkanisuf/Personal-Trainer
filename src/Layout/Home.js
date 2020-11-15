@@ -15,17 +15,17 @@ const useStyles = makeStyles({
   first: {
     minWidth: 275,
     height: 200,
-    backgroundColor: "#4caf50",
+    backgroundColor: "white",
 
     marginBottom: "50px",
-    transition: "1s",
+    transition: "0.3s",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: "25px",
 
     "&:hover": {
-      transform: "scale(1.1)",
+      backgroundColor: "#c8e6c9",
     },
   },
   second: {
@@ -33,14 +33,14 @@ const useStyles = makeStyles({
     height: 200,
     backgroundColor: "white",
     marginBottom: "50px",
-    transition: "1s",
+    transition: "0.3s",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: "25px",
 
     "&:hover": {
-      transform: "scale(1.1)",
+      backgroundColor: "#c8e6c9",
     },
   },
   third: {
@@ -48,29 +48,29 @@ const useStyles = makeStyles({
     height: 200,
     marginBottom: "50px",
     backgroundColor: "white",
-    transition: "1s",
+    transition: "0.3s",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: "25px",
     "&:hover": {
-      transform: "scale(1.1)",
+      backgroundColor: "#c8e6c9",
     },
   },
   fourth: {
     minWidth: 275,
     height: 200,
     marginBottom: "50px",
-    backgroundColor: "#4caf50",
+    backgroundColor: "white",
     borderRadius: "25px",
-    transition: "1s",
+    transition: "0.3s",
 
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
 
     "&:hover": {
-      transform: "scale(1.1)",
+      backgroundColor: "#c8e6c9",
     },
   },
 });
@@ -93,41 +93,6 @@ const Home = () => {
         borderRadius: "25px",
       }}
     >
-      <Card className={classes.first}>
-        <Link
-          style={{
-            color: "black",
-            textDecoration: "none",
-            width: "100%",
-            height: "100%",
-            padding: "10px",
-            fontFamily: "Ubuntu, sans-serif",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          to="/datastats"
-        >
-          <CardContent>
-            <Typography
-              variant="h5"
-              component="h2"
-              color="textSecondary"
-              gutterBottom
-              style={{
-                color: "white",
-                fontFamily: "Ubuntu, sans-serif",
-                textShadow: "2px 4px 3px rgba(0,0,0,0.3)",
-              }}
-            >
-              Data Table
-              <div style={{ transform: "scale(3)", marginTop: "28px" }}>
-                <BarChartIcon />
-              </div>
-            </Typography>
-          </CardContent>
-        </Link>
-      </Card>
       <Card className={classes.second}>
         <Link
           style={{
@@ -156,7 +121,13 @@ const Home = () => {
               gutterBottom
             >
               Trainings
-              <div style={{ transform: "scale(3)", marginTop: "28px" }}>
+              <div
+                style={{
+                  transform: "scale(3)",
+                  marginTop: "28px",
+                  color: "#4caf50",
+                }}
+              >
                 <FitnessCenterIcon />
               </div>
             </Typography>
@@ -191,7 +162,13 @@ const Home = () => {
               gutterBottom
             >
               Customers
-              <div style={{ transform: "scale(3)", marginTop: "28px" }}>
+              <div
+                style={{
+                  transform: "scale(3)",
+                  marginTop: "28px",
+                  color: "#4caf50",
+                }}
+              >
                 <EmojiPeopleIcon />
               </div>
             </Typography>
@@ -201,7 +178,7 @@ const Home = () => {
       <Card className={classes.fourth}>
         <Link
           style={{
-            color: "white",
+            color: "black",
             textDecoration: "none",
             width: "100%",
             height: "100%",
@@ -216,7 +193,7 @@ const Home = () => {
           <CardContent>
             <Typography
               style={{
-                color: "white",
+                color: "black",
                 fontFamily: "Ubuntu, sans-serif",
                 textShadow: "2px 4px 3px rgba(0,0,0,0.3)",
               }}
@@ -226,8 +203,55 @@ const Home = () => {
               gutterBottom
             >
               Calendar
-              <div style={{ transform: "scale(3)", marginTop: "28px" }}>
+              <div
+                style={{
+                  transform: "scale(3)",
+                  marginTop: "28px",
+                  color: "#4caf50",
+                }}
+              >
                 <EventIcon />
+              </div>
+            </Typography>
+          </CardContent>
+        </Link>
+      </Card>
+      <Card className={classes.first}>
+        <Link
+          style={{
+            color: "black",
+            textDecoration: "none",
+            width: "100%",
+            height: "100%",
+            padding: "10px",
+            fontFamily: "Ubuntu, sans-serif",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          to="/datastats"
+        >
+          <CardContent>
+            <Typography
+              variant="h5"
+              component="h2"
+              color="textSecondary"
+              gutterBottom
+              style={{
+                color: "black",
+                fontFamily: "Ubuntu, sans-serif",
+                textShadow: "2px 4px 3px rgba(0,0,0,0.3)",
+              }}
+            >
+              Data Table
+              <div
+                style={{
+                  transform: "scale(3)",
+                  marginTop: "28px",
+                  color: "#4caf50",
+                }}
+              >
+                <BarChartIcon />
               </div>
             </Typography>
           </CardContent>

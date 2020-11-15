@@ -67,7 +67,6 @@ const OnclickTrain = ({ handleCloseOnclick, openOnclick, opneningObj }) => {
   const deleteItem = () => {
     fetch(`${opneningObj.resource[0].href}`, { method: "DELETE" })
       .then((data) => {
-        console.log(data, "deleted");
         setOpensnack(true);
         setConfirm(false);
         handleCloseOnclick();
@@ -94,7 +93,7 @@ const OnclickTrain = ({ handleCloseOnclick, openOnclick, opneningObj }) => {
         <DialogTitle id="form-dialog-title">Training information</DialogTitle>
         <DialogContent
           style={{
-            width: window.innerWidth <= 480 ? "95%" : "100%",
+            width: window.innerWidth <= 480 ? "90%" : "100%",
             height: "100%",
           }}
         >

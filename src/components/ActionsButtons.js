@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { MyContext } from "../Context/Context";
-// import { useComponentWillMount } from "./utils";
+
 import Button from "@material-ui/core/Button";
 import EditIcon from "@material-ui/icons/Edit";
 import { makeStyles } from "@material-ui/core/styles";
@@ -85,13 +85,6 @@ const ActionsRenderer = (props) => {
   };
   const [startValue, setStartValue] = useState({});
   const [buttonClicked, setbuttonClicked] = useState(false);
-  // custom hook
-  // useComponentWillMount(() => {
-  //   let editingCells = props.api.getEditingCells();
-  //   if (editingCells.length !== 0) {
-  //     setDisabled(true);
-  //   }
-  // });
 
   useEffect(() => {
     props.api.addEventListener("rowEditingStarted", onRowEditingStarted);
@@ -111,13 +104,10 @@ const ActionsRenderer = (props) => {
       },
       body: JSON.stringify(object),
     })
-      .then((key) => console.log("key", key))
+      .then((key) => console.log("Processing"))
       .then((key) => {
-        // reFetch();
-        // valueThree();
-        setbuttonClicked(false);
+        setbuttonClicked(false); // Very Buggy this whole function , cant take off the Warning thats why had to put Refire useEffect
         setReFire(2);
-        // window.location.reload(); // Cant figure OUT THIS THING its so buggy thats why reload -_-
       })
       .catch((err) => console.error(err));
   };
@@ -223,7 +213,6 @@ const ActionsRenderer = (props) => {
   const fetchDelete = (param) => {
     fetch(`${param}`, { method: "DELETE" })
       .then((data) => {
-        console.log(data, "deleted");
         valueThree();
       })
       .catch((err) => console.error(err));

@@ -8,7 +8,6 @@ import TextField from "@material-ui/core/TextField";
 
 import AddCustomer from "./AddCustomer";
 import ActionsButtons from "./ActionsButtons";
-import Paper from "@material-ui/core/Paper";
 
 const Customers = () => {
   const grid = useRef();

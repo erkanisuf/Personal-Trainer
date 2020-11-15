@@ -59,7 +59,6 @@ const CalendarJS = () => {
     };
     makeCalendarArray();
   }, [train]);
-  console.log(train);
 
   const [open, setOpen] = useState(false);
   const [startvalue, setStartValue] = useState({
@@ -82,7 +81,6 @@ const CalendarJS = () => {
     setStartValue({ ...startvalue, duration: parseInt(e.target.value) });
   };
   const handleSelect = (param) => {
-    console.log(param);
     const calculate = param.end - param.start;
     const calculateTwo = calculate / 60000;
     setStartValue({
@@ -92,15 +90,12 @@ const CalendarJS = () => {
       duration: calculateTwo,
     });
     setOpen(true);
-
-    console.log(calculateTwo);
   };
 
   const [select, setSelect] = useState(null);
   const reNewStates = (event) => {
     setSelect(event);
     if (event === null) {
-      console.log("its nul man");
     } else {
       setStartValue({ ...startvalue, customer: event.links[1].href });
     }
@@ -126,12 +121,27 @@ const CalendarJS = () => {
     setopenOnclick(false);
   };
   const onSelectEvent = (param) => {
-    console.log(param);
     setopenOnclick(true);
     setopeningObj(param);
   };
 
   /////
+
+  const eventStyleGetter = (event, start, end, isSelected) => {
+    var style = {
+      backgroundColor: "#1b5e20",
+      borderRadius: "2px",
+      opacity: 0.8,
+      color: "white",
+      margin: "5px",
+      border: "1px solid black",
+      display: "block",
+    };
+    return {
+      style: style,
+    };
+  };
+
   return (
     <div
       style={{
@@ -179,6 +189,7 @@ const CalendarJS = () => {
           onSelectEvent={onSelectEvent}
           onSelectSlot={handleSelect}
           selectable={true}
+          eventPropGetter={eventStyleGetter}
         />
       )}
     </div>

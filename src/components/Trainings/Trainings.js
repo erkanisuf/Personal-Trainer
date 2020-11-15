@@ -87,7 +87,7 @@ const Trainings = () => {
 
           return newObject;
         });
-        console.log(createArr);
+
         setRows(newArrayMake);
         seterrorFilter(false);
       }
@@ -95,9 +95,6 @@ const Trainings = () => {
     addIdtoTrainings();
   }, [contexTrain, customer, value]);
 
-  // renderCell: (param) => (
-  //   <LinearProgress variant="determinate" value={50} />
-  // ),
   const normalise = (value) => ((value - 15) * 100) / (240 - 15);
   const columns = [
     { field: "id", headerName: "ID" },
@@ -122,9 +119,14 @@ const Trainings = () => {
               variant="determinate"
               value={normalise(param.value)}
               style={{
+                colorPrimary: {
+                  background: "green",
+                },
                 height: "50%",
                 width: "100%",
                 alignSelf: "center",
+                backgroundColor: "#c8e6c9",
+
                 margin: "5px",
               }}
             />
@@ -156,24 +158,20 @@ const Trainings = () => {
     setSelectedRows(rows);
   };
   const [selectedRows, setSelectedRows] = useState([]);
-  console.log(selectedRows, "stateSELECTED");
 
   const deleteAllArray = (param) => {
     return Promise.all(
       param.map((url) =>
         fetch(url, { method: "DELETE" })
-          .then((response) => console.log(response))
+          .then((response) => console.log("Processing"))
           .then((responseData) => {
-            console.log(responseData, "2ndresp");
             setOpenDialog(false);
             setOpensnack(true);
             valueThree();
           })
           .catch((err) => console.error(err))
       )
-    ).then((responseData) => {
-      console.log(responseData);
-    });
+    ).then((responseData) => {});
   };
 
   const deleteSelected = () => {

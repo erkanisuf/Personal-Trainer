@@ -66,7 +66,6 @@ const ModalCustomers = ({ open, handleClose, training, user }) => {
   const fetchdeleteTrain = (param) => {
     fetch(`${param}`, { method: "DELETE" })
       .then((data) => {
-        console.log(data, "deleted");
         valueThree();
       })
       .catch((err) => console.error(err));
