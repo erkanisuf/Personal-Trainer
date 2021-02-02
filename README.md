@@ -6,15 +6,15 @@ It has also charts data for the customers and the trainings .
 
 **Why i did it?**
 <br />
-I had the need to test library`
+Was interested to test the library`s such as Material UI and Data Grids which can be sometimes tuff with lots of data in it. Managed to customize on my own need the Ag Grid library which is very well done and can be extreamlly usefull. This application helped me to gain knowledge how i can make UX friendly with the help of data grids.
 <br />
 
 **How to run ?**
 <br />
-git pull and npm start in terminal
+git pull and  npm start in terminal
 <br />
 
 **Live preview?**
 <br />
-Currently no live preview , it was just practise on local machine.
+https://trainerapp.netlify.app/
 <br />
