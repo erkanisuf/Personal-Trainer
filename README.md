@@ -10,9 +10,15 @@ Was interested to test the library`s such as Material UI and Data Grids which ca
 <br />
 
 **How to run ?**
-<br />
-git pull and  npm start in terminal
-<br />
+</br>
+git pull  (in terminal)
+</br>
+npm install  (to install all needed modules)
+</br>
+
+</br>
+npm start (in terminal)
+</br>
 
 **Live preview?**
 <br />
