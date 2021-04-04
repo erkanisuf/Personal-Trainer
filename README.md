@@ -11,11 +11,15 @@ Customer scheduling for personal trainers .
   - Material UI
   - Re Chart
   - React Big Calendar
-
+- Backend
+  - Uses Open API of customers and trainings (provides GET,POST,PUT,DEL request aswell)
 
 ## Preview
 <br />
 Live demo: https://trainerapp.netlify.app/
+<br />
+Frontend Deployed to: Netlify
+<br />
 <br />
 
 ## Features of the application
