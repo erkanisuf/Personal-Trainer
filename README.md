@@ -1,26 +1,36 @@
-**What about is this app?**
+# Personal Trainer Application
+## About the app
 <br />
-Designed for personal trainers . It fetches data from heroku API. Has all needed CRUD operatons, track of users , trainings and calendar with personal traine`s schedule.
-It has also charts data for the customers and the trainings .
+Customer scheduling for personal trainers .
+
+## Tech used 
+
+- Frontend
+  - React
+  - AG Grid
+  - Material UI
+  - Re Chart
+  - React Big Calendar
+
+
+## Preview
+<br />
+Live demo: https://trainerapp.netlify.app/
 <br />
 
-**Why i did it?**
-<br />
-Was interested to test the library`s such as Material UI and Data Grids which can be sometimes tuff with lots of data in it. Managed to customize on my own need the Ag Grid library which is very well done and can be extreamlly usefull. This application helped me to gain knowledge how i can make UX friendly with the help of data grids.
-<br />
+## Features of the application
+- Lists of Customers and Trainings;
+- Add / Edit / Delete operation for trainings and customers;
+- Filtering and Sorting;
+- Calendar with schedules;
+- Data charts with statistics;
 
-**How to run ?**
-</br>
-git pull  (in terminal)
-</br>
-npm install  (to install all needed modules)
-</br>
 
-</br>
-npm start (in terminal)
-</br>
+## Installation
+- Fork from github
+- Run npm start
 
-**Live preview?**
-<br />
-https://trainerapp.netlify.app/
-<br />
+
+
+
+
